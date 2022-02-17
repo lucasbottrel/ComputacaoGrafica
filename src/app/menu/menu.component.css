@@ -5,5 +5,30 @@
     align-self: left;
     margin-right: 70px;
     box-shadow: 0px 0px 1px #fff;
-    border: solid 1px rgb(88, 88, 88)
+    border: solid 1px rgb(88, 88, 88);
+
+}
+
+.transformacoes-geometricas{
+    color: white;
+    padding: 0 20px 0 20px;
+}
+
+.transf-operacoes{
+    display: flex;
+    gap: 3%;
+}
+
+.transf-operacoes button{
+    width: 50%;
+    height: 40px;
+    background: none;
+    border: solid 1px rgb(88, 88, 88);
+    color: white;
+    
+}
+
+.transf-operacoes button:hover{
+    background: rgb(102, 102, 102);
+    cursor: pointer;
 }
