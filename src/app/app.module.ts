@@ -5,11 +5,13 @@ import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
 import { CanvasComponent } from './canvas/canvas.component';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
-    CanvasComponent
+    CanvasComponent,
   ],
   imports: [
     BrowserModule

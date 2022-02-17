@@ -1,17 +1,21 @@
 .canvas {
-    border: solid 1px rgb(88, 88, 88);
-    width: 600px;
-    height: 600px;
+  border: solid 1px rgb(88, 88, 88);
+  width: 600px;
+  height: 600px;
 }
 
 .pixel {
-    width: 30px;
-    height: 30px;
-    float: left;
-    box-shadow: 0px 0px 1px #fff;
+  width: 30px;
+  height: 30px;
+  float: left;
+  box-shadow: 0px 0px 1px #fff;
 }
 
 .pixel:hover {
-    background-color: rgb(102, 102, 102);
-    cursor: pointer;
+  background-color: rgb(102, 102, 102);
+  cursor: pointer;
+}
+
+.pixel13{
+    background-color: red;
 }
