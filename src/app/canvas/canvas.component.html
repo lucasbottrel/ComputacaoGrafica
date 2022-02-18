@@ -1,14 +1,14 @@
-<div class="canvas" id="canvas">
-  <div
-    *ngFor="let item of canvasSize; let y = index"
-    numColumn="y"
-    class="column"
-  >
-    <div
-      *ngFor="let pixel of canvasSize; let x = index"
-      class="pixel pixel{{x+''+y}}"
-      x="x"
-      y="y"
-    ></div>
+<ng-container *ngIf="width && height">
+  <div *ngFor="let column of columns" class="lines">
+    <p>{{column}}</p>
   </div>
-</div>
+  <drawing-grid class="canvas"
+    [width]="width"
+    [height]="height"
+    [pixelSize]="pixelSize"
+    (mouseDown)="onMouseDown($event)"
+    (mouseMove)="onMouseMove($event)"
+    (mouseUp)="onMouseUp($event)"
+    (contextMenu)="onContextMenu($event)">
+  </drawing-grid>
+</ng-container>
