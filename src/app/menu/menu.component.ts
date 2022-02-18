@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-menu',
@@ -6,10 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
+  @Output() messageEvent = new EventEmitter<boolean>();
+
+  enableGrid = false;
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  selectRetasDDA(){
+    this.enableGrid = true;
+    this.messageEvent.emit(this.enableGrid);
   }
 
 }

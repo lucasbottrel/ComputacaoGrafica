@@ -1,4 +1,12 @@
 <div class="menu">
+    <div class="desenhar">
+        <p>Desenhar</p>
+        <div class="opcoes-desenhos">
+            <button (click)="selectRetasDDA()">Retas - DDA</button>
+            <button>Retas - Bresenham</button>
+            <button>Circunferência - Bresenham</button>
+        </div>
+    </div>
     <div class="transformacoes-geometricas">
         <p>Tranformações Geométricas</p>
         <div class="transf-operacoes">
@@ -6,6 +14,13 @@
             <button>Rotação</button>
             <button>Escala</button>
             <button>Reflexão</button>
+        </div>
+    </div>
+    <div class="recortes">
+        <p>Recortes</p>
+        <div class="opcoes-recortes">
+            <button>Regiões codificadas – Cohen-Sutherland </button>
+            <button>Equação paramétrica – Liang-Barsky </button>
         </div>
     </div>
 </div>

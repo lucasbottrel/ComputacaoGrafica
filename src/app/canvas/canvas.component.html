@@ -1,7 +1,4 @@
 <ng-container *ngIf="width && height">
-  <div *ngFor="let column of columns" class="lines">
-    <p>{{column}}</p>
-  </div>
   <drawing-grid class="canvas"
     [width]="width"
     [height]="height"

@@ -9,6 +9,15 @@
 
 }
 
+.desenhar{
+    color: white;
+    padding: 0 20px 0 20px;
+}
+
+.desenhar p{
+    font-size: 20px;
+}
+
 .transformacoes-geometricas{
     color: white;
     padding: 0 20px 0 20px;
@@ -18,12 +27,31 @@
     font-size: 20px;
 }
 
+.recortes{
+    color: white;
+    padding: 0 20px 0 20px;
+}
+
+.recortes p{
+    font-size: 20px;
+}
+
 .transf-operacoes{
     display: flex;
     gap: 3%;
 }
 
-.transf-operacoes button{
+.opcoes-desenhos{
+    display: flex;
+    gap: 3%;
+}
+
+.opcoes-recortes{
+    display: flex;
+    gap: 3%;
+}
+
+button{
     width: 50%;
     height: 40px;
     background: none;
@@ -34,7 +62,7 @@
     
 }
 
-.transf-operacoes button:hover{
+button:hover{
     background: rgb(102, 102, 102);
     cursor: pointer;
 }

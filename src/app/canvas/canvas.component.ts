@@ -2,6 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DrawingGridService, Pixel, PaintingMode } from 'ngx-drawing-grid';
+import { setLines } from '@angular/material/core';
 
 @Component({
   selector: 'app-canvas',
@@ -12,8 +13,10 @@ export class CanvasComponent implements OnInit, OnDestroy{
   
   private readonly destroy$: Subject<void> = new Subject<void>();
 
-  lines: number[] = Array.from(Array(28).keys());
-  columns: number[] = Array.from(Array(28).keys())
+  lines: string[] = ["00","01","02","03","04","05","06","07","08","09","10",
+                     "11","12","13","14","15","16","17","18","19","20","21",
+                     "22","23","24","25","26","27","28"];
+  columns: string[] = this.lines;
   width: number = 0;
   height: number = 0;
   pixelSize = 21;
