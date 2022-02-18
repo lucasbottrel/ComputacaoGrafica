@@ -59,10 +59,38 @@ button{
     color: white;
     box-shadow: 0px 0px 1px #fff;
     font-size: 15px;
-    
 }
 
 button:hover{
     background: rgb(102, 102, 102);
+    cursor: pointer;
+}
+
+.unselected{
+    width: 50%;
+    height: 40px;
+    background: none;
+    border: solid 1px rgb(88, 88, 88);
+    color: white;
+    box-shadow: 0px 0px 1px #fff;
+    font-size: 15px;
+}
+
+.unselected:hover{
+    background: rgb(102, 102, 102);
+    cursor: pointer;
+}
+
+.selected{
+    width: 50%;
+    height: 40px;
+    background: rgb(102, 102, 102);;
+    border: solid 1px rgb(88, 88, 88);
+    color: white;
+    box-shadow: 0px 0px 1px #fff;
+    font-size: 15px;
+}
+
+.selected:hover{
     cursor: pointer;
 }

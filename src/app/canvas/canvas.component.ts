@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DrawingGridService, Pixel, PaintingMode } from 'ngx-drawing-grid';
@@ -10,6 +10,20 @@ import { setLines } from '@angular/material/core';
   styleUrls: ['./canvas.component.css']
 })
 export class CanvasComponent implements OnInit, OnDestroy{
+  
+  enableGrid: boolean = false;
+  buttonSelected: string = "";
+  
+  @Input('enableGrid')
+  set ENABLEGRID(enableGrid:any) {
+    this.enableGrid = enableGrid;
+    console.log("Canvas input",this.enableGrid);
+  }
+  @Input('buttonSelected')
+  set BUTTONSELECTED(buttonSelected: any){
+    this.buttonSelected = buttonSelected;
+    console.log("Canvas input",this.buttonSelected);
+  }
   
   private readonly destroy$: Subject<void> = new Subject<void>();
 
@@ -32,6 +46,9 @@ export class CanvasComponent implements OnInit, OnDestroy{
   ) {}
 
   ngOnInit() {
+
+    console.log("Canvas onInit", this.enableGrid);
+    
     this.gridService.paintingMode$.pipe(takeUntil(this.destroy$)).subscribe((paintingMode) => {
       this.paintingMode = paintingMode;
     });
@@ -46,12 +63,9 @@ export class CanvasComponent implements OnInit, OnDestroy{
   }
 
   onMouseDown(pixel: Pixel) {
-    this.fillPixel(pixel.x, pixel.y);
+    this.enableGrid ? this.fillPixel(pixel.x, pixel.y) : "";
   }
 
-  onMouseMove(pixel: Pixel) {
-    this.fillPixel(pixel.x, pixel.y);
-  }
 
   onMouseUp(pixel: Pixel) {}
 

@@ -2,9 +2,12 @@
     <div class="desenhar">
         <p>Desenhar</p>
         <div class="opcoes-desenhos">
-            <button (click)="selectRetasDDA()">Retas - DDA</button>
-            <button>Retas - Bresenham</button>
-            <button>Circunferência - Bresenham</button>
+            <button *ngIf="buttonSelected === 'retasDDA'" class="selected">Retas - DDA</button>
+            <button *ngIf="buttonSelected !== 'retasDDA'" class="unselected" (click)="selectRetasDDA()">Retas - DDA</button>
+            <button *ngIf="buttonSelected === 'retasBresenham'" class="selected">Retas - Bresenham</button>
+            <button *ngIf="buttonSelected !== 'retasBresenham'" class="unselected" (click)="selectRetasBresenham()">Retas - Bresenham</button>
+            <button *ngIf="buttonSelected === 'circuloBresenham'" class="selected">Circunferência - Bresenham</button>
+            <button *ngIf="buttonSelected !== 'circuloBresenham'" class="unselected" (click)="selectCirculoBresenham()">Circunferência - Bresenham</button>
         </div>
     </div>
     <div class="transformacoes-geometricas">
