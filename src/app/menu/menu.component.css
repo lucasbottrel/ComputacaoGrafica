@@ -2,7 +2,6 @@
     width: 800px;
     height: 600px;
     background-color: #333;
-    align-self: left;
     margin-right: 70px;
     box-shadow: 0px 0px 1px #fff;
     border: solid 1px rgb(88, 88, 88);
@@ -11,7 +10,8 @@
 
 .desenhar{
     color: white;
-    padding: 0 20px 0 20px;
+    padding: 20px 40px 0 40px;
+    margin-bottom: 50px;
 }
 
 .desenhar p{
@@ -20,7 +20,8 @@
 
 .transformacoes-geometricas{
     color: white;
-    padding: 0 20px 0 20px;
+    padding: 20px 40px 0 40px;
+    margin-bottom: 50px;
 }
 
 .transformacoes-geometricas p{
@@ -29,7 +30,8 @@
 
 .recortes{
     color: white;
-    padding: 0 20px 0 20px;
+    padding: 20px 40px 0 40px;
+    /* margin-bottom: 50px; */
 }
 
 .recortes p{
