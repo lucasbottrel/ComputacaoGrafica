@@ -1,10 +1,10 @@
+<button (click)="cleanCanvas()">Limpar</button>
 <ng-container *ngIf="width && height">
   <drawing-grid class="canvas"
     [width]="width"
     [height]="height"
     [pixelSize]="pixelSize"
     (mouseDown)="onMouseDown($event)"
-    (mouseUp)="onMouseUp($event)"
     (contextMenu)="onContextMenu($event)">
   </drawing-grid>
 </ng-container>

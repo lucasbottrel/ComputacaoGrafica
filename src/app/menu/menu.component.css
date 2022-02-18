@@ -62,7 +62,7 @@ button{
 }
 
 button:hover{
-    background: rgb(102, 102, 102);
+    background: rgb(88, 88, 88);
     cursor: pointer;
 }
 
@@ -77,14 +77,14 @@ button:hover{
 }
 
 .unselected:hover{
-    background: rgb(102, 102, 102);
+    background: rgb(88, 88, 88);
     cursor: pointer;
 }
 
 .selected{
     width: 50%;
     height: 40px;
-    background: rgb(102, 102, 102);;
+    background: rgb(88, 88, 88);
     border: solid 1px rgb(88, 88, 88);
     color: white;
     box-shadow: 0px 0px 1px #fff;
