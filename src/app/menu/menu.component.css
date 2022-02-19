@@ -1,3 +1,9 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .menu {
     width: 800px;
     height: 600px;
@@ -8,10 +14,33 @@
 
 }
 
+.circleRaio {
+    margin-top: 20px;
+    text-align: right;
+    display: flex;
+}
+
+.circleRaio p {
+    margin: 0 20px 0 0;
+
+}
+
+.raioInput {
+    border: 1px solid rgb(88, 88, 88);
+    box-shadow: 0px 0px 1px #fff;
+    border-radius: 2px;
+    color: white;
+    padding: 2px;
+    width: 15%;
+    height: 25px;
+    text-align: center;
+    font-size: 15px;
+}
+
 .desenhar{
     color: white;
     padding: 20px 40px 0 40px;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
 .desenhar p{
@@ -51,6 +80,18 @@
 .opcoes-recortes{
     display: flex;
     gap: 3%;
+}
+
+.ok-button{
+    width: 10%;
+    height: 30px;
+    margin-left: 10px;
+    background: rgb(88, 88, 88);
+}
+
+.ok-button:hover{
+    background: rgb(129, 129, 129);
+    border: 1px solid rgb(129, 129, 129);
 }
 
 button{

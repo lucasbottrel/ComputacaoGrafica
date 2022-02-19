@@ -11,6 +11,7 @@ export class MainComponent implements OnInit {
 
   enableGrid: boolean = false;
   buttonSelected: string = "";
+  raio: number = 0;
 
   constructor() { }
 
@@ -27,6 +28,11 @@ export class MainComponent implements OnInit {
   buttonSelectedMessage($event: any){
     this.buttonSelected = $event;
     console.log("main:",this.buttonSelected)
+  }
+
+  raioMessage($event: any){
+    this.raio = $event;
+    console.log("main:",this.raio);
   }
 
 }
