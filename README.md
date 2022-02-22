@@ -1,9 +1,7 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
+# Grid lib insrall
+
+`npm i ngx-drawing-grid`
 
 # ComputacaoParalelaUnidadeUm
 
