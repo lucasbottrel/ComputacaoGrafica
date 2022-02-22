@@ -1,11 +1,14 @@
-
-# Grid lib insrall
-
-`npm i ngx-drawing-grid`
-
 # ComputacaoParalelaUnidadeUm
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.4.
+
+## Remember to install dependencies
+
+` npm install `
+
+## Grid lib install
+
+`npm i ngx-drawing-grid`
 
 ## Development server
 
