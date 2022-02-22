@@ -42,7 +42,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   height: number = 0;
   pixelSize = 13;
 
-  circleRaio: any;
+  circleRaio: any = 3;
 
   numPixels: number = 0;
   paintedPixels: any = [];
