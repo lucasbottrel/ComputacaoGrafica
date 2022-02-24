@@ -9,11 +9,6 @@
             <button *ngIf="buttonSelected === 'circuloBresenham'" class="selected">Circunferência - Bresenham</button>
             <button *ngIf="buttonSelected !== 'circuloBresenham'" class="unselected" (click)="selectCirculoBresenham()">Circunferência - Bresenham</button>
         </div>
-        <div *ngIf="buttonSelected === 'circuloBresenham'" class="circleRaio">
-            <p>Raio: </p>
-            <input (change)="sendRaioValue()" [(ngModel)]="raio" class="raioInput" type="number">
-            <!-- <button type="submit" class="ok-button">OK</button> -->
-        </div>
     </div>
     <div class="transformacoes-geometricas">
         <p>Tranformações Geométricas</p>

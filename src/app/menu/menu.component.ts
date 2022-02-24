@@ -8,7 +8,6 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 export class MenuComponent implements OnInit {
   @Output() enableGridEvent = new EventEmitter<boolean>();
   @Output() buttonSelectedEvent = new EventEmitter<string>();
-  @Output() raioEvent = new EventEmitter<number>();
 
   enableGrid = false;
   buttonSelected: string = '';
@@ -37,9 +36,5 @@ export class MenuComponent implements OnInit {
     this.enableGridEvent.emit(this.enableGrid);
     this.buttonSelected = 'circuloBresenham';
     this.buttonSelectedEvent.emit(this.buttonSelected);
-  }
-
-  sendRaioValue(){
-    this.raioEvent.emit(this.raio);
   }
 }

@@ -27,22 +27,12 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.setNumPixels();
   }
 
-  @Input('raio')
-  set RAIO(raio: any) {
-    this.circleRaio = raio;
-    console.log('Canvas input', this.circleRaio);
-
-    this.setNumPixels();
-  }
-
   enableGrid: boolean = false;
   buttonSelected: string = '';
 
   width: number = 0;
   height: number = 0;
   pixelSize = 13;
-
-  circleRaio: any = 3;
 
   numPixels: number = 0;
   paintedPixels: any = [];
@@ -186,7 +176,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.gridService.fillPixel(xc - y, yc - x, 'white');
   }
 
-  calculateRadius(x1:number, x2:number, y1:number, y2:number){
+  calculateRadius(x1:number, y1:number, x2:number, y2:number){
     return Math.ceil( Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
   }
 
