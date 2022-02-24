@@ -63,8 +63,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
         this.paintingMode = paintingMode;
       });
 
-    this.width = 600;
-    this.height = 600;
+    this.width = 500;
+    this.height = 500;
   }
 
   setNumPixels() {
@@ -73,7 +73,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     } else if (this.buttonSelected === 'retasBresenham') {
       this.numPixels = 2;
     } else if (this.buttonSelected === 'circuloBresenham') {
-      this.numPixels = 1;
+      this.numPixels = 2;
     }
   }
 
@@ -186,22 +186,29 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.gridService.fillPixel(xc - y, yc - x, 'white');
   }
 
+  calculateRadius(x1:number, x2:number, y1:number, y2:number){
+    return Math.ceil( Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
+  }
+
   circleBresenham() {
     let xc = this.paintedPixels[0].x;
     let yc = this.paintedPixels[0].y;
-    let raio = this.circleRaio;
+
+    let raio = this.calculateRadius(xc, yc, this.paintedPixels[1].x, this.paintedPixels[1].y)
+    console.log(raio);
+    
     let x = 0;
     let y = raio;
 
-    let d = 3 - 2 * raio;
+    let p = 3 - 2 * raio;
     this.drawCircle(xc, yc, x, y);
     while (y >= x) {
       x++;
 
-      if (d > 0) {
+      if (p > 0) {
         y--;
-        d = d + 4 * (x - y) + 10;
-      } else d = d + 4 * x + 6;
+        p = p + 4 * (x - y) + 10;
+      } else p = p + 4 * x + 6;
       this.drawCircle(xc, yc, x, y);
     }
     this.gridService.clearPixel(xc, yc);

@@ -5,13 +5,11 @@ input::-webkit-inner-spin-button {
 }
 
 .menu {
-    width: 800px;
-    height: 600px;
     background-color: #333;
     margin-right: 70px;
     box-shadow: 0px 0px 1px #fff;
     border: solid 1px rgb(88, 88, 88);
-
+    padding: 30px;
 }
 
 .circleRaio {
@@ -39,18 +37,21 @@ input::-webkit-inner-spin-button {
 
 .desenhar{
     color: white;
-    padding: 20px 40px 0 40px;
     margin-bottom: 30px;
+    margin-top: 0;
 }
 
 .desenhar p{
     font-size: 20px;
 }
 
+.desenhar-title{
+    margin-top: 0px;
+}
+
 .transformacoes-geometricas{
     color: white;
-    padding: 20px 40px 0 40px;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
 .transformacoes-geometricas p{
@@ -59,8 +60,7 @@ input::-webkit-inner-spin-button {
 
 .recortes{
     color: white;
-    padding: 20px 40px 0 40px;
-    /* margin-bottom: 50px; */
+    margin-bottom: 30px;
 }
 
 .recortes p{
@@ -95,13 +95,13 @@ input::-webkit-inner-spin-button {
 }
 
 button{
-    width: 50%;
+    width: 70%;
     height: 40px;
     background: none;
     border: solid 1px rgb(88, 88, 88);
     color: white;
     box-shadow: 0px 0px 1px #fff;
-    font-size: 15px;
+    font-size: 13px;
 }
 
 button:hover{
@@ -116,7 +116,7 @@ button:hover{
     border: solid 1px rgb(88, 88, 88);
     color: white;
     box-shadow: 0px 0px 1px #fff;
-    font-size: 15px;
+    font-size: 13px;
 }
 
 .unselected:hover{
@@ -131,7 +131,7 @@ button:hover{
     border: solid 1px rgb(88, 88, 88);
     color: white;
     box-shadow: 0px 0px 1px #fff;
-    font-size: 15px;
+    font-size: 13px;
 }
 
 .selected:hover{

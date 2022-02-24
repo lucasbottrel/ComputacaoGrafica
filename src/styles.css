@@ -3,6 +3,8 @@
 * {
     background-color: #333;
     font-family: "Open Sans", sans-serif;
+    text-align: center;
+    align-items: center;
 }
 
 html, body { height: 100%; }
