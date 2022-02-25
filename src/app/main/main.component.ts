@@ -20,13 +20,11 @@ export class MainComponent implements OnInit {
 
   enableGridMessage($event: any){
     this.enableGrid = $event;
-    console.log("main:",this.enableGrid);
     
   }
 
   buttonSelectedMessage($event: any){
     this.buttonSelected = $event;
-    console.log("main:",this.buttonSelected)
   }
 
 }

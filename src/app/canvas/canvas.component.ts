@@ -14,7 +14,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   @Input('enableGrid')
   set ENABLEGRID(enableGrid: any) {
     this.enableGrid = enableGrid;
-    console.log('Canvas input', this.enableGrid);
+
 
     this.setNumPixels();
   }
@@ -22,14 +22,15 @@ export class CanvasComponent implements OnInit, OnDestroy {
   @Input('buttonSelected')
   set BUTTONSELECTED(buttonSelected: any) {
     this.buttonSelected = buttonSelected;
-    console.log('Canvas input', this.buttonSelected);
 
     this.setNumPixels();
+    this.paintedPixels = [];
   }
 
   enableGrid: boolean = false;
   buttonSelected: string = '';
 
+  centerPixel = {x: 17, y:17}
   width: number = 0;
   height: number = 0;
   pixelSize = 13;
@@ -40,6 +41,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
   paintingMode: any;
 
   pixelColor: string = 'orange';
+
+  gridObjects:any = [];
 
   constructor(
     private host: ElementRef,
@@ -73,21 +76,28 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   onMouseDown(pixel: Pixel) {
-    this.enableGrid && this.numPixels > 0
-      ? this.fillPixel(pixel.x, pixel.y)
-      : '';
-    this.numPixels--;
+    
+    if(this.enableGrid && this.numPixels > 0){
+      this.fillPixel(pixel.x, pixel.y)
+      this.numPixels--
+    }
 
     if (this.numPixels == 0 && this.buttonSelected == 'retasDDA') {
       this.dda();
+      this.paintedPixels = [];
+      this.setNumPixels();
+      console.log(this.gridObjects);
+      
     } else if (this.numPixels == 0 && this.buttonSelected == 'retasBresenham') {
       this.lineBresenham();
-    } else if (
-      this.numPixels == 0 &&
-      this.buttonSelected == 'circuloBresenham'
-    ) {
+      this.paintedPixels = [];
+      this.setNumPixels();
+    } else if ( this.numPixels == 0 && this.buttonSelected == 'circuloBresenham') {
       this.circleBresenham();
+      this.paintedPixels = [];
+      this.setNumPixels();
     }
+    
   }
 
   onContextMenu(pixel: Pixel) {
@@ -102,7 +112,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.gridService.fillPixel(x, y, this.pixelColor);
   }
 
-  dda() {
+  dda() {    
+    let pixels = [];
     let deltaX = this.paintedPixels[1].x - this.paintedPixels[0].x;
     let deltaY = this.paintedPixels[1].y - this.paintedPixels[0].y;
 
@@ -117,9 +128,12 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
     for (let i = 0; i <= steps; i++) {
       this.gridService.fillPixel(Math.round(x), Math.round(y), 'white');
+      pixels.push({x: Math.round(x),y: Math.round(y)});
       x += xInc;
       y += yInc;
     }
+
+    this.gridObjects.push(pixels);
   }
 
   lineBresenham() {
@@ -185,7 +199,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     let yc = this.paintedPixels[0].y;
 
     let raio = this.calculateRadius(xc, yc, this.paintedPixels[1].x, this.paintedPixels[1].y)
-    console.log(raio);
+    this.gridService.clearPixel(this.paintedPixels[1].x, this.paintedPixels[1].y);
     
     let x = 0;
     let y = raio;
@@ -202,12 +216,13 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.drawCircle(xc, yc, x, y);
     }
     this.gridService.clearPixel(xc, yc);
+    
   }
 
   cleanCanvas() {
 
-    for (let x = 0; x <=45; x++) {
-      for (let y = 0; y <= 45; y++) {
+    for (let x = 0; x <=38; x++) {
+      for (let y = 0; y <= 38; y++) {
         this.gridService.clearPixel(x, y);
       }
     }

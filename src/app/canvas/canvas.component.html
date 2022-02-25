@@ -1,3 +1,6 @@
+<p *ngIf="!this.buttonSelected">Clique em uma das opções de desenho</p>
+<p *ngIf="this.buttonSelected && numPixels == 2">Marque o ponto inicial</p>
+<p *ngIf="this.buttonSelected && numPixels == 1">Marque o ponto final</p>
 <ng-container *ngIf="width && height">
   <drawing-grid
     class="canvas"

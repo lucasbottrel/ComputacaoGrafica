@@ -13,3 +13,7 @@ button:hover{
     background: rgb(88, 88, 88);
     cursor: pointer;
 }
+
+p{
+    color: white;
+}
