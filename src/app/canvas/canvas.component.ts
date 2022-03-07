@@ -37,6 +37,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   numPixels: number = 0;
   paintedPixels: any = [];
+  objPixels:any = [];
 
   paintingMode: any;
 
@@ -86,17 +87,19 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.dda();
       this.paintedPixels = [];
       this.setNumPixels();
-      console.log(this.gridObjects);
       
     } else if (this.numPixels == 0 && this.buttonSelected == 'retasBresenham') {
       this.lineBresenham();
       this.paintedPixels = [];
       this.setNumPixels();
+
     } else if ( this.numPixels == 0 && this.buttonSelected == 'circuloBresenham') {
       this.circleBresenham();
       this.paintedPixels = [];
       this.setNumPixels();
     }
+
+    console.log(this.gridObjects);
     
   }
 
@@ -113,7 +116,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   dda() {    
-    let pixels = [];
     let deltaX = this.paintedPixels[1].x - this.paintedPixels[0].x;
     let deltaY = this.paintedPixels[1].y - this.paintedPixels[0].y;
 
@@ -128,12 +130,13 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
     for (let i = 0; i <= steps; i++) {
       this.gridService.fillPixel(Math.round(x), Math.round(y), 'white');
-      pixels.push({x: Math.round(x),y: Math.round(y)});
+      this.objPixels.push({x: Math.round(x),y: Math.round(y)});
       x += xInc;
       y += yInc;
     }
 
-    this.gridObjects.push(pixels);
+    this.gridObjects.push(this.objPixels);
+    this.objPixels = [];
   }
 
   lineBresenham() {
@@ -147,6 +150,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     const absdy = Math.abs(dy);
 
     this.gridService.fillPixel(x, y, 'white');
+    this.objPixels.push(x,y);
 
     // slope < 1
     if (absdx > absdy) {
@@ -161,6 +165,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
           d = d + (2 * absdy - 2 * absdx);
         }
         this.gridService.fillPixel(x, y, 'white');
+        this.objPixels.push(x,y);
       }
     } else {
       // case when slope is greater than or equals to 1
@@ -174,20 +179,32 @@ export class CanvasComponent implements OnInit, OnDestroy {
           d = d + 2 * absdx - 2 * absdy;
         }
         this.gridService.fillPixel(x, y, 'white');
+        this.objPixels.push(x,y);
       }
     }
+    this.gridObjects.push(this.objPixels);
+    this.objPixels = [];
   }
 
   drawCircle(xc: any, yc: any, x: any, y: any) {
     this.gridService.fillPixel(xc + x, yc + y, 'white');
+    this.objPixels.push(xc + x, yc + y);
     this.gridService.fillPixel(xc + x, yc + y, 'white');
+    this.objPixels.push(xc + x, yc + y);
     this.gridService.fillPixel(xc - x, yc + y, 'white');
+    this.objPixels.push(xc + x,yc + y);
     this.gridService.fillPixel(xc + x, yc - y, 'white');
+    this.objPixels.push(xc + x,yc + y);
     this.gridService.fillPixel(xc - x, yc - y, 'white');
+    this.objPixels.push(xc + x,yc + y);
     this.gridService.fillPixel(xc + y, yc + x, 'white');
+    this.objPixels.push(xc + x,yc + y);
     this.gridService.fillPixel(xc - y, yc + x, 'white');
+    this.objPixels.push(xc + x,yc + y);
     this.gridService.fillPixel(xc + y, yc - x, 'white');
+    this.objPixels.push(xc + x,yc + y);
     this.gridService.fillPixel(xc - y, yc - x, 'white');
+    this.objPixels.push(xc + x,yc + y);
   }
 
   calculateRadius(x1:number, y1:number, x2:number, y2:number){
@@ -215,7 +232,9 @@ export class CanvasComponent implements OnInit, OnDestroy {
       } else p = p + 4 * x + 6;
       this.drawCircle(xc, yc, x, y);
     }
+    this.gridObjects.push(this.objPixels);
     this.gridService.clearPixel(xc, yc);
+    this.objPixels = [];
     
   }
 
@@ -227,6 +246,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
       }
     }
     this.paintedPixels = [];
+    this.gridObjects = [];
     this.setNumPixels();
   }
 }
