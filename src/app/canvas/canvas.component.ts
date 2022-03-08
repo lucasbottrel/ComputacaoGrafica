@@ -15,7 +15,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   set ENABLEGRID(enableGrid: any) {
     this.enableGrid = enableGrid;
 
-
     this.setNumPixels();
   }
 
@@ -27,8 +26,17 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.paintedPixels = [];
   }
 
+  @Input('transformacoes')
+  set TRANSFORMACOES(transformacoes: any) {
+    this.transformacoes = transformacoes;
+
+    if(this.buttonSelected === 'translacao') this.translacao();
+
+  }
+
   enableGrid: boolean = false;
   buttonSelected: string = '';
+  transformacoes: any;
 
   centerPixel = {x: 17, y:17}
   width: number = 0;
@@ -61,6 +69,34 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.height = 500;
   }
 
+  translacao(){
+    let newGridObjects: any[] = [];
+    
+    if(this.gridObjects.length > 0){      
+      this.gridObjects.forEach((obj: any[]) => {
+          let newObj: any[] = [];
+          obj.forEach(pixel => {
+            newObj.push({x: pixel.x + this.transformacoes.x, y: pixel.y + this.transformacoes.y})
+          })
+          newGridObjects.push(newObj)
+      });
+    }
+
+    this.gridObjects.forEach((obj: any[]) => {
+      obj.forEach(pixel => {
+        this.gridService.clearPixel(pixel.x, pixel.y);
+      })
+    });
+    
+    this.gridObjects = newGridObjects;
+    
+    this.gridObjects.forEach((obj: any[]) => {
+      obj.forEach(pixel => {
+        this.gridService.fillPixel(pixel.x, pixel.y, "white");
+      })
+    });
+  }
+
   setNumPixels() {
     if (this.buttonSelected === 'retasDDA') {
       this.numPixels = 2;
@@ -68,6 +104,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.numPixels = 2;
     } else if (this.buttonSelected === 'circuloBresenham') {
       this.numPixels = 2;
+    } else if (this.buttonSelected === 'translacao') {
+      this.numPixels = 0;
     }
   }
 
@@ -150,7 +188,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     const absdy = Math.abs(dy);
 
     this.gridService.fillPixel(x, y, 'white');
-    this.objPixels.push(x,y);
+    this.objPixels.push({x: x, y: y});
 
     // slope < 1
     if (absdx > absdy) {
@@ -165,7 +203,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
           d = d + (2 * absdy - 2 * absdx);
         }
         this.gridService.fillPixel(x, y, 'white');
-        this.objPixels.push(x,y);
+        this.objPixels.push({x: x, y: y});
       }
     } else {
       // case when slope is greater than or equals to 1
@@ -179,7 +217,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
           d = d + 2 * absdx - 2 * absdy;
         }
         this.gridService.fillPixel(x, y, 'white');
-        this.objPixels.push(x,y);
+        this.objPixels.push({x: x, y: y});
       }
     }
     this.gridObjects.push(this.objPixels);
@@ -188,23 +226,29 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   drawCircle(xc: any, yc: any, x: any, y: any) {
     this.gridService.fillPixel(xc + x, yc + y, 'white');
-    this.objPixels.push(xc + x, yc + y);
-    this.gridService.fillPixel(xc + x, yc + y, 'white');
-    this.objPixels.push(xc + x, yc + y);
+    this.objPixels.push({x: xc + x, y: yc + y});
+
     this.gridService.fillPixel(xc - x, yc + y, 'white');
-    this.objPixels.push(xc + x,yc + y);
+    this.objPixels.push({x: xc - x, y: yc + y});
+
     this.gridService.fillPixel(xc + x, yc - y, 'white');
-    this.objPixels.push(xc + x,yc + y);
+    this.objPixels.push({x: xc + x, y: yc - y});
+
     this.gridService.fillPixel(xc - x, yc - y, 'white');
-    this.objPixels.push(xc + x,yc + y);
+    this.objPixels.push({x: xc - x, y: yc - y});
+
     this.gridService.fillPixel(xc + y, yc + x, 'white');
-    this.objPixels.push(xc + x,yc + y);
+    this.objPixels.push({x: xc + y, y: yc + x});
+
     this.gridService.fillPixel(xc - y, yc + x, 'white');
-    this.objPixels.push(xc + x,yc + y);
+    this.objPixels.push({x: xc - y, y: yc + x});
+
     this.gridService.fillPixel(xc + y, yc - x, 'white');
-    this.objPixels.push(xc + x,yc + y);
+    this.objPixels.push({x: xc + y, y: yc - x});
+
     this.gridService.fillPixel(xc - y, yc - x, 'white');
-    this.objPixels.push(xc + x,yc + y);
+    this.objPixels.push({x: xc - y, y: yc - x});
+
   }
 
   calculateRadius(x1:number, y1:number, x2:number, y2:number){

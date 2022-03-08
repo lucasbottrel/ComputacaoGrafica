@@ -10,6 +10,7 @@ input::-webkit-inner-spin-button {
     box-shadow: 0px 0px 1px #fff;
     border: solid 1px rgb(88, 88, 88);
     padding: 30px;
+    width: 600px;
 }
 
 .circleRaio {
@@ -23,16 +24,30 @@ input::-webkit-inner-spin-button {
 
 }
 
-.raioInput {
+.translacao-input, .angulo-input {
     border: 1px solid rgb(88, 88, 88);
     box-shadow: 0px 0px 1px #fff;
     border-radius: 2px;
     color: white;
     padding: 2px;
-    width: 15%;
+    width: 10%;
     height: 25px;
     text-align: center;
     font-size: 15px;
+    margin: 10px;
+}
+
+.submit{
+    font-size: 13px;
+    border: 1px solid rgb(88, 88, 88);
+    box-shadow: 0px 0px 1px #fff;
+    border-radius: 2px;
+    color: white;
+    padding: 2px;
+    width: 10%;
+    height: 30px;
+    text-align: center;
+    margin: 10px;
 }
 
 .desenhar{
@@ -58,6 +73,15 @@ input::-webkit-inner-spin-button {
     font-size: 20px;
 }
 
+.parametros-translacao, .parametros-rotacao{
+    display: flex;
+    width: 100%;
+    margin: 10px;
+}
+
+.parametros-translacao p, .parametros-rotacao p{
+    font-size: 13px;
+}
 .recortes{
     color: white;
     margin-bottom: 30px;

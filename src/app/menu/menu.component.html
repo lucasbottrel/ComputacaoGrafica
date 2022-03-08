@@ -13,10 +13,32 @@
     <div class="transformacoes-geometricas">
         <p>Tranformações Geométricas</p>
         <div class="transf-operacoes">
-            <button>Translação</button>
-            <button>Rotação</button>
-            <button>Escala</button>
-            <button>Reflexão</button>
+            <button *ngIf="buttonSelected === 'translacao'" class="selected">Translação</button>
+            <button *ngIf="buttonSelected !== 'translacao'" class="unselected" (click)="selectTranslacao()" >Translação</button>
+            <button *ngIf="buttonSelected === 'rotacao'" class="selected" >Rotação</button>
+            <button *ngIf="buttonSelected !== 'rotacao'" class="unselected" (click)="selectRotacao()">Rotação</button>
+            <button *ngIf="buttonSelected === 'escala'" class="selected" >Escala</button>
+            <button *ngIf="buttonSelected !== 'escala'" class="unselected" (click)="selectEscala()">Escala</button>
+            <button *ngIf="buttonSelected === 'reflexao'" class="selected">Reflexão</button>
+            <button *ngIf="buttonSelected !== 'reflexao'" class="unselected" (click)="selectReflexao()">Reflexão</button>
+        </div>
+        <div *ngIf="buttonSelected === 'translacao'" class="parametros-translacao">
+            <p>Fator de Translação:</p>
+            <input type="number" class="translacao-input" placeholder="x" [(ngModel)]="fatorX">
+            <input type="number" class="translacao-input" placeholder="y" [(ngModel)]="fatorY">
+            <button class="submit" (click)="enviarParametros()">OK</button> 
+        </div>
+        <div *ngIf="buttonSelected === 'rotacao'" class="parametros-rotacao">
+            <p>Angulo de rotacao: </p>
+            <input type="number" class="angulo-input" placeholder="60" [(ngModel)]="angulo">
+            <p>graus</p>
+            <button class="submit" (click)="enviarParametros()">OK</button> 
+        </div>
+        <div *ngIf="buttonSelected === 'escala'" class="parametros-translacao">
+            <p>Fator de Escala:</p>
+            <input type="number" class="translacao-input" placeholder="x" [(ngModel)]="escalaX">
+            <input type="number" class="translacao-input" placeholder="y" [(ngModel)]="escalaY">
+            <button class="submit" (click)="enviarParametros()">OK</button> 
         </div>
     </div>
     <div class="recortes">

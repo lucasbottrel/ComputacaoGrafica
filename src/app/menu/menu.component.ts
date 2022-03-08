@@ -8,10 +8,16 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 export class MenuComponent implements OnInit {
   @Output() enableGridEvent = new EventEmitter<boolean>();
   @Output() buttonSelectedEvent = new EventEmitter<string>();
+  @Output() fatorEvent = new EventEmitter<any>();
 
   enableGrid = false;
   buttonSelected: string = '';
   raio: any;
+  fatorX: any;
+  fatorY: any;
+  escalaX:any;
+  escalaY:any;
+  angulo: any;
 
   constructor() {}
 
@@ -36,5 +42,38 @@ export class MenuComponent implements OnInit {
     this.enableGridEvent.emit(this.enableGrid);
     this.buttonSelected = 'circuloBresenham';
     this.buttonSelectedEvent.emit(this.buttonSelected);
+  }
+
+  selectTranslacao(){
+    this.enableGrid = false;
+    this.buttonSelected = 'translacao';
+    this.buttonSelectedEvent.emit(this.buttonSelected);
+  }
+
+  selectRotacao(){
+    this.enableGrid = false;
+    this.buttonSelected = 'rotacao';
+    this.buttonSelectedEvent.emit(this.buttonSelected);
+  }
+
+  selectEscala(){
+    this.enableGrid = false;
+    this.buttonSelected = 'escala';
+    this.buttonSelectedEvent.emit(this.buttonSelected);
+  }
+
+  selectReflexao(){
+    this.enableGrid = false;
+    this.buttonSelected = 'reflexao';
+    this.buttonSelectedEvent.emit(this.buttonSelected);
+  }
+
+  enviarParametros(){
+    this.enableGrid = false;
+    if(this.buttonSelected === 'translacao') this.fatorEvent.emit({x: this.fatorX, y: this.fatorY});
+    else if(this.buttonSelected === 'rotacao') this.fatorEvent.emit({r: this.angulo});
+    else if(this.buttonSelected === 'escala') this.fatorEvent.emit({x: this.escalaX, y:this.escalaY})
+    this.fatorX = "";
+    this.fatorY = "";
   }
 }

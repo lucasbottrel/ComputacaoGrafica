@@ -11,6 +11,7 @@ export class MainComponent implements OnInit {
 
   enableGrid: boolean = false;
   buttonSelected: string = "";
+  transformacoes: any;
 
   constructor() { }
 
@@ -25,6 +26,10 @@ export class MainComponent implements OnInit {
 
   buttonSelectedMessage($event: any){
     this.buttonSelected = $event;
+  }
+
+  transformacoesMessage($event: any){
+    this.transformacoes = $event;
   }
 
 }
