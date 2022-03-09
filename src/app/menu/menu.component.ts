@@ -75,5 +75,7 @@ export class MenuComponent implements OnInit {
     else if(this.buttonSelected === 'escala') this.fatorEvent.emit({x: this.escalaX, y:this.escalaY})
     this.fatorX = "";
     this.fatorY = "";
+    this.escalaX = "";
+    this.escalaY = "";
   }
 }
