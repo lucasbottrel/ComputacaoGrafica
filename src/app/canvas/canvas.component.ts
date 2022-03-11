@@ -132,32 +132,27 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   rotacao() {
     console.log(this.transformacoes);
-    let ang = (this.transformacoes.r * 180) / Math.PI;
+    
+    let ang = (this.transformacoes.r * Math.PI) / 180;
+    console.log(ang);
+    
 
     if (this.gridObject) {
-      console.log('entrei');
 
       let obj = this.gridObject;
 
       let p0 = obj[0];
       let pf = obj[obj.length - 1];
 
-      console.log(p0, pf);
-
-      let origem1 = { x: p0.x - p0.x, y: p0.y - p0.y };
-      let origem2 = { x: pf.x - p0.x, y: pf.y - p0.y };
-
-      let p0xAux = origem1.x * Math.cos(ang) - origem1.y * Math.sin(ang);
-      let p0yAux = origem1.x * Math.sin(ang) + origem1.y * Math.cos(ang);
-      p0.x = Math.round(p0xAux + p0.x);
-      p0.y = Math.round(p0yAux = p0.y);
+      let p0xAux = p0.x * Math.cos(ang) - p0.y * Math.sin(ang);
+      let p0yAux = p0.x * Math.sin(ang) + p0.y * Math.cos(ang);
+      p0.x = Math.round(p0xAux);
+      p0.y = Math.round(p0yAux);
 
       let pfxAux = pf.x * Math.cos(ang) - pf.y * Math.sin(ang);
       let pfyAux = pf.x * Math.sin(ang) + pf.y * Math.cos(ang);
       pf.x = Math.round(pfxAux);
       pf.y = Math.round(pfyAux);
-
-      console.log(p0, pf);
 
       for (let x = 0; x < 70; x++) {
         for (let y = 0; y < 70; y++) {

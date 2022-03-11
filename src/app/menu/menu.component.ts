@@ -77,5 +77,6 @@ export class MenuComponent implements OnInit {
     this.fatorY = "";
     this.escalaX = "";
     this.escalaY = "";
+    this.angulo = "";
   }
 }
