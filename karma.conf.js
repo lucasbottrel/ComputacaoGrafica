@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/computacao-paralela-unidade-um'),
+      dir: require('path').join(__dirname, './coverage/computacao-grafica-unidade-um'),
       subdir: '.',
       reporters: [
         { type: 'html' },

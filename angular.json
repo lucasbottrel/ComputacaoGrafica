@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "computacao-paralela-unidade-um": {
+    "computacao-grafica-unidade-um": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "docs",
+            "outputPath": "dist/computacao-grafica-unidade-um",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "computacao-paralela-unidade-um:build:production"
+              "browserTarget": "computacao-grafica-unidade-um:build:production"
             },
             "development": {
-              "browserTarget": "computacao-paralela-unidade-um:build:development"
+              "browserTarget": "computacao-grafica-unidade-um:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "computacao-paralela-unidade-um:build"
+            "browserTarget": "computacao-grafica-unidade-um:build"
           }
         },
         "test": {
@@ -100,9 +100,12 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
   },
-  "defaultProject": "computacao-paralela-unidade-um"
+  "defaultProject": "computacao-grafica-unidade-um"
 }
