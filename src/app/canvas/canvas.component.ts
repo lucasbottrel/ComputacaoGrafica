@@ -99,10 +99,11 @@ export class CanvasComponent implements OnInit, OnDestroy {
     if (this.gridObject) {
       let obj = this.gridObject;
 
-      let p0 = obj[0];
-      let pf = obj[obj.length - 1];
+      let p0_orig = obj[0];
+      let pf_orig = obj[obj.length - 1];
 
-      console.log(p0, pf);
+      let p0 = {x: 0, y: 0}
+      let pf = {x: pf_orig.x - p0_orig.x, y: pf_orig.y - p0_orig.y}
 
       if (this.transformacoes.x != null && this.transformacoes.x != 0) {
         p0.x = p0.x * this.transformacoes.x;
@@ -114,8 +115,11 @@ export class CanvasComponent implements OnInit, OnDestroy {
         pf.y = pf.y * this.transformacoes.y;
       }
 
-      for (let x = 0; x < 70; x++) {
-        for (let y = 0; y < 70; y++) {
+      p0 = {x: p0.x + p0_orig.x, y: p0.y + p0_orig.y } 
+      pf = {x: pf.x + p0_orig.x, y: pf.y + p0_orig.y }
+
+      for (let x = 0; x <= 70; x++) {
+        for (let y = 0; y <= 70; y++) {
           this.gridService.clearPixel(x, y);
         }
       }
@@ -133,16 +137,19 @@ export class CanvasComponent implements OnInit, OnDestroy {
   rotacao() {
     console.log(this.transformacoes);
     
-    let ang = (this.transformacoes.r * Math.PI) / 180;
-    console.log(ang);
-    
+    let ang = -(this.transformacoes.r * Math.PI) / 180;   
 
     if (this.gridObject) {
 
       let obj = this.gridObject;
 
-      let p0 = obj[0];
-      let pf = obj[obj.length - 1];
+      let p0_orig = obj[0];
+      let pf_orig = obj[obj.length - 1];
+
+      let p0 = {x: 0, y: 0}
+      let pf = {x: pf_orig.x - p0_orig.x, y: pf_orig.y - p0_orig.y}
+
+      console.log(p0, pf)
 
       let p0xAux = p0.x * Math.cos(ang) - p0.y * Math.sin(ang);
       let p0yAux = p0.x * Math.sin(ang) + p0.y * Math.cos(ang);
@@ -154,8 +161,11 @@ export class CanvasComponent implements OnInit, OnDestroy {
       pf.x = Math.round(pfxAux);
       pf.y = Math.round(pfyAux);
 
-      for (let x = 0; x < 70; x++) {
-        for (let y = 0; y < 70; y++) {
+      p0 = {x: p0.x + p0_orig.x, y: p0.y + p0_orig.y } 
+      pf = {x: pf.x + p0_orig.x, y: pf.y + p0_orig.y } 
+
+      for (let x = 0; x <= 70; x++) {
+        for (let y = 0; y <= 70; y++) {
           this.gridService.clearPixel(x, y);
         }
       }
