@@ -9,18 +9,12 @@ export class MainComponent implements OnInit {
 
   @Output() messageEvent = new EventEmitter<boolean>();
 
-  enableGrid: boolean = false;
   buttonSelected: string = "";
   transformacoes: any;
 
   constructor() { }
 
   ngOnInit(): void {
-    
-  }
-
-  enableGridMessage($event: any){
-    this.enableGrid = $event;
     
   }
 

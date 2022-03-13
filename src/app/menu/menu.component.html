@@ -2,25 +2,25 @@
     <div class="desenhar">
         <p class="desenhar-title">Desenhar</p>
         <div class="opcoes-desenhos">
-            <button *ngIf="buttonSelected === 'retasDDA'" class="selected">Retas - DDA</button>
-            <button *ngIf="buttonSelected !== 'retasDDA'" class="unselected" (click)="selectRetasDDA()">Retas - DDA</button>
-            <button *ngIf="buttonSelected === 'retasBresenham'" class="selected">Retas - Bresenham</button>
-            <button *ngIf="buttonSelected !== 'retasBresenham'" class="unselected" (click)="selectRetasBresenham()">Retas - Bresenham</button>
-            <button *ngIf="buttonSelected === 'circuloBresenham'" class="selected">Circunferência - Bresenham</button>
-            <button *ngIf="buttonSelected !== 'circuloBresenham'" class="unselected" (click)="selectCirculoBresenham()">Circunferência - Bresenham</button>
+            <button *ngIf="buttonSelected === 'retasDDA'" class="menu-button selected">Retas - DDA</button>
+            <button *ngIf="buttonSelected !== 'retasDDA'" class="menu-button unselected" (click)="selectRetasDDA()">Retas - DDA</button>
+            <button *ngIf="buttonSelected === 'retasBresenham'" class="menu-button selected">Retas - Bresenham</button>
+            <button *ngIf="buttonSelected !== 'retasBresenham'" class="menu-button unselected" (click)="selectRetasBresenham()">Retas - Bresenham</button>
+            <button *ngIf="buttonSelected === 'circuloBresenham'" class="menu-button selected">Circunferência - Bresenham</button>
+            <button *ngIf="buttonSelected !== 'circuloBresenham'" class="menu-button unselected" (click)="selectCirculoBresenham()">Circunferência - Bresenham</button>
         </div>
     </div>
     <div class="transformacoes-geometricas">
         <p>Tranformações Geométricas</p>
         <div class="transf-operacoes">
-            <button *ngIf="buttonSelected === 'translacao'" class="selected">Translação</button>
-            <button *ngIf="buttonSelected !== 'translacao'" class="unselected" (click)="selectTranslacao()" >Translação</button>
-            <button *ngIf="buttonSelected === 'rotacao'" class="selected" >Rotação</button>
-            <button *ngIf="buttonSelected !== 'rotacao'" class="unselected" (click)="selectRotacao()">Rotação</button>
-            <button *ngIf="buttonSelected === 'escala'" class="selected" >Escala</button>
-            <button *ngIf="buttonSelected !== 'escala'" class="unselected" (click)="selectEscala()">Escala</button>
-            <button *ngIf="buttonSelected === 'reflexao'" class="selected">Reflexão</button>
-            <button *ngIf="buttonSelected !== 'reflexao'" class="unselected" (click)="selectReflexao()">Reflexão</button>
+            <button *ngIf="buttonSelected === 'translacao'" class="menu-button selected">Translação</button>
+            <button *ngIf="buttonSelected !== 'translacao'" class="menu-button unselected" (click)="selectTranslacao()" >Translação</button>
+            <button *ngIf="buttonSelected === 'rotacao'" class="menu-button selected" >Rotação</button>
+            <button *ngIf="buttonSelected !== 'rotacao'" class="menu-button unselected" (click)="selectRotacao()">Rotação</button>
+            <button *ngIf="buttonSelected === 'escala'" class="menu-button selected" >Escala</button>
+            <button *ngIf="buttonSelected !== 'escala'" class="menu-button unselected" (click)="selectEscala()">Escala</button>
+            <button *ngIf="buttonSelected === 'reflexao'" class="menu-button selected">Reflexão</button>
+            <button *ngIf="buttonSelected !== 'reflexao'" class="menu-button unselected" (click)="selectReflexao()">Reflexão</button>
         </div>
         <div *ngIf="buttonSelected === 'translacao'" class="parametros-translacao">
             <p>Fator de Translação:</p>
@@ -34,18 +34,25 @@
             <p>graus</p>
             <button class="submit" (click)="enviarParametros()">OK</button> 
         </div>
-        <div *ngIf="buttonSelected === 'escala'" class="parametros-translacao">
+        <div *ngIf="buttonSelected === 'escala'" class="parametros-escala">
             <p>Fator de Escala:</p>
             <input type="number" class="translacao-input" placeholder="x" [(ngModel)]="escalaX">
             <input type="number" class="translacao-input" placeholder="y" [(ngModel)]="escalaY">
             <button class="submit" (click)="enviarParametros()">OK</button> 
         </div>
+        <div *ngIf="buttonSelected === 'reflexao'" class="parametros-reflexao">
+            <button class="reflexao-input unselected" (click)="selectReflexaoX()">Eixo X</button>
+            <button class="reflexao-input unselected" (click)="selectReflexaoY()">Eixo Y</button>
+            <button class="reflexao-input unselected" (click)="selectReflexaoXY()">Eixos X e Y</button>
+        </div>
     </div>
     <div class="recortes">
         <p>Recortes</p>
         <div class="opcoes-recortes">
-            <button>Regiões codificadas – Cohen-Sutherland </button>
-            <button>Equação paramétrica – Liang-Barsky </button>
+            <button *ngIf="buttonSelected === 'cohenSutherland'" class="menu-button selected">Regiões codificadas – Cohen-Sutherland </button>
+            <button *ngIf="buttonSelected !== 'cohenSutherland'" class="menu-button unselected" (click)="selectCohenSutherland()">Regiões codificadas – Cohen-Sutherland </button>
+            <button *ngIf="buttonSelected === 'liangBarsky'" class="menu-button selected">Equação paramétrica – Liang-Barsky </button>
+            <button *ngIf="buttonSelected !== 'liangBarsky'" class="menu-button unselected" (click)="selectLiangBarsky()">Equação paramétrica – Liang-Barsky </button>
         </div>
     </div>
 </div>

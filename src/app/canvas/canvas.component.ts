@@ -11,49 +11,20 @@ import { DrawingGridService, Pixel, PaintingMode } from 'ngx-drawing-grid';
 export class CanvasComponent implements OnInit, OnDestroy {
   private readonly destroy$: Subject<void> = new Subject<void>();
 
-  @Input('enableGrid')
-  set ENABLEGRID(enableGrid: any) {
-    this.enableGrid = enableGrid;
-
-    this.setNumPixels();
-  }
-
-  @Input('buttonSelected')
-  set BUTTONSELECTED(buttonSelected: any) {
-    this.buttonSelected = buttonSelected;
-
-    this.setNumPixels();
-    this.paintedPixels = [];
-  }
-
-  @Input('transformacoes')
-  set TRANSFORMACOES(transformacoes: any) {
-    this.transformacoes = transformacoes;
-    console.log(this.transformacoes);
-
-    if (this.buttonSelected === 'translacao') this.translacao();
-    if (this.buttonSelected === 'rotacao') this.rotacao();
-    if (this.buttonSelected === 'escala') this.escala();
-  }
-
   enableGrid: boolean = false;
   buttonSelected: string = '';
   transformacoes: any;
-
   centerPixel = { x: 35, y: 35 };
   width: number = 500;
   height: number = 500;
   pixelSize = 7;
-
   numPixels: number = 0;
   paintedPixels: any = [];
+  paintedPixelsClip: any = [];
   objPixels: any = [];
   drawType: string = '';
-
   paintingMode: any;
-
   pixelColor: string = 'orange';
-
   gridObject: any = [];
 
   constructor(private gridService: DrawingGridService) {}
@@ -66,135 +37,48 @@ export class CanvasComponent implements OnInit, OnDestroy {
       });
   }
 
-  translacao() {
-    let newGridObject: any;
-    console.log(this.transformacoes);
-
-    if (this.gridObject) {
-      let obj = this.gridObject;
-      let newObj: any[] = [];
-      obj.forEach((pixel: { x: any; y: number }) => {
-        newObj.push({
-          x: pixel.x + this.transformacoes.x,
-          y: pixel.y - this.transformacoes.y,
-        });
-      });
-      newGridObject = newObj;
-    }
-
-    this.gridObject.forEach((pixel: { x: number; y: number }) => {
-      this.gridService.clearPixel(pixel.x, pixel.y);
-    });
-
-    this.gridObject = newGridObject;
-
-    this.gridObject.forEach((pixel: { x: number; y: number }) => {
-      this.gridService.fillPixel(pixel.x, pixel.y, 'white');
-    });
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  escala() {
-    console.log(this.transformacoes);
-
-    if (this.gridObject) {
-      let obj = this.gridObject;
-
-      let p0_orig = obj[0];
-      let pf_orig = obj[obj.length - 1];
-
-      let p0 = {x: 0, y: 0}
-      let pf = {x: pf_orig.x - p0_orig.x, y: pf_orig.y - p0_orig.y}
-
-      if (this.transformacoes.x != null && this.transformacoes.x != 0) {
-        p0.x = p0.x * this.transformacoes.x;
-        pf.x = pf.x * this.transformacoes.x;
-      }
-
-      if (this.transformacoes.y != null && this.transformacoes.y != 0) {
-        p0.y = p0.y * this.transformacoes.y;
-        pf.y = pf.y * this.transformacoes.y;
-      }
-
-      p0 = {x: p0.x + p0_orig.x, y: p0.y + p0_orig.y } 
-      pf = {x: pf.x + p0_orig.x, y: pf.y + p0_orig.y }
-
-      for (let x = 0; x <= 70; x++) {
-        for (let y = 0; y <= 70; y++) {
-          this.gridService.clearPixel(x, y);
-        }
-      }
-
-      if (this.drawType === 'dda') {
-        this.dda(p0.x, p0.y, pf.x, pf.y);
-      } else if (this.drawType === 'bresenham') {
-        this.lineBresenham(p0.x, p0.y, pf.x, pf.y);
-      } else if (this.drawType === 'circle') {
-        this.circleBresenham(p0.x, p0.y, pf.x, pf.y);
-      }
-    }
+  @Input('buttonSelected')
+  set BUTTONSELECTED(buttonSelected: any) {
+    this.buttonSelected = buttonSelected;
+    this.setNumPixels();
   }
 
-  rotacao() {
+  @Input('transformacoes')
+  set TRANSFORMACOES(transformacoes: any) {
+    this.transformacoes = transformacoes;
     console.log(this.transformacoes);
-    
-    let ang = -(this.transformacoes.r * Math.PI) / 180;   
 
-    if (this.gridObject) {
-
-      let obj = this.gridObject;
-
-      let p0_orig = obj[0];
-      let pf_orig = obj[obj.length - 1];
-
-      let p0 = {x: 0, y: 0}
-      let pf = {x: pf_orig.x - p0_orig.x, y: pf_orig.y - p0_orig.y}
-
-      console.log(p0, pf)
-
-      let p0xAux = p0.x * Math.cos(ang) - p0.y * Math.sin(ang);
-      let p0yAux = p0.x * Math.sin(ang) + p0.y * Math.cos(ang);
-      p0.x = Math.round(p0xAux);
-      p0.y = Math.round(p0yAux);
-
-      let pfxAux = pf.x * Math.cos(ang) - pf.y * Math.sin(ang);
-      let pfyAux = pf.x * Math.sin(ang) + pf.y * Math.cos(ang);
-      pf.x = Math.round(pfxAux);
-      pf.y = Math.round(pfyAux);
-
-      p0 = {x: p0.x + p0_orig.x, y: p0.y + p0_orig.y } 
-      pf = {x: pf.x + p0_orig.x, y: pf.y + p0_orig.y } 
-
-      for (let x = 0; x <= 70; x++) {
-        for (let y = 0; y <= 70; y++) {
-          this.gridService.clearPixel(x, y);
-        }
-      }
-
-      if (this.drawType === 'dda') {
-        this.dda(p0.x, p0.y, pf.x, pf.y);
-      } else if (this.drawType === 'bresenham') {
-        this.lineBresenham(p0.x, p0.y, pf.x, pf.y);
-      } else if (this.drawType === 'circle') {
-        this.circleBresenham(p0.x, p0.y, pf.x, pf.y);
-      }
-    }
+    if (this.buttonSelected === 'translacao') this.translacao();
+    else if (this.buttonSelected === 'rotacao') this.rotacao();
+    else if (this.buttonSelected === 'escala') this.escala();
+    else if (this.buttonSelected === 'reflexao') this.reflexao();
   }
 
   setNumPixels() {
     if (
-      this.buttonSelected === 'retasDDA' ||
-      this.buttonSelected === 'retasBresenham' ||
-      this.buttonSelected === 'circuloBresenham'
+      (this.buttonSelected === 'retasDDA' ||
+        this.buttonSelected === 'retasBresenham' ||
+        this.buttonSelected === 'circuloBresenham') &&
+      this.gridObject.length == 0
     ) {
+      this.pixelColor = 'orange';
+      this.enableGrid = true;
       this.numPixels = 2;
-    } else if (this.buttonSelected === 'translacao') {
-      this.numPixels = 0;
+    } else if (
+      this.gridObject.length > 0 &&
+      (this.buttonSelected === 'liangBarsky' ||
+        this.buttonSelected === 'cohenSutherland')
+    ) {
+      this.pixelColor = 'green';
+      this.enableGrid = true;
+      this.numPixels = 2;
     }
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    console.log(this.buttonSelected, this.numPixels, this.gridObject.length);
   }
 
   onMouseDown(pixel: Pixel) {
@@ -205,7 +89,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.numPixels--;
     }
 
-    if (this.numPixels == 0) {
+    if (this.numPixels == 0 && this.enableGrid) {
       if (this.buttonSelected == 'retasDDA') {
         this.dda(
           this.paintedPixels[0].x,
@@ -227,9 +111,14 @@ export class CanvasComponent implements OnInit, OnDestroy {
           this.paintedPixels[1].x,
           this.paintedPixels[1].y
         );
+      } else if (this.buttonSelected == 'cohenSutherland') {
+        this.cohenSutherland();
+      } else if (this.buttonSelected == 'liangBarsky') {
+        this.liangBarsky();
       }
-      this.paintedPixels = [];
+
       this.enableGrid = false;
+      this.paintedPixels = [];
     }
 
     console.log('Objeto no grid:', this.gridObject);
@@ -246,6 +135,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.gridService.fillPixel(x, y, this.pixelColor);
   }
 
+  //------------------ DESENHOS --------------------------
   dda(x0: number, y0: number, x1: number, y1: number) {
     this.drawType = 'dda';
     let deltaX = x1 - x0;
@@ -376,15 +266,321 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.objPixels = [];
   }
 
+  //------------------ TRANSFORMAÇÕES GEOMETRICAS --------------------------
+  translacao() {
+    let newGridObject: any;
+    console.log(this.transformacoes);
+
+    if (this.gridObject) {
+      let obj = this.gridObject;
+      let newObj: any[] = [];
+      obj.forEach((pixel: { x: any; y: number }) => {
+        newObj.push({
+          x: pixel.x + this.transformacoes.x,
+          y: pixel.y - this.transformacoes.y,
+        });
+      });
+      newGridObject = newObj;
+    }
+
+    this.gridObject.forEach((pixel: { x: number; y: number }) => {
+      this.gridService.clearPixel(pixel.x, pixel.y);
+    });
+
+    this.gridObject = newGridObject;
+
+    this.gridObject.forEach((pixel: { x: number; y: number }) => {
+      this.gridService.fillPixel(pixel.x, pixel.y, 'white');
+    });
+  }
+
+  escala() {
+    console.log(this.transformacoes);
+
+    if (this.gridObject) {
+      let obj = this.gridObject;
+
+      let p0_orig = obj[0];
+      let pf_orig = obj[obj.length - 1];
+
+      let p0 = { x: 0, y: 0 };
+      let pf = { x: pf_orig.x - p0_orig.x, y: pf_orig.y - p0_orig.y };
+
+      if (this.transformacoes.x != null && this.transformacoes.x != 0) {
+        p0.x = p0.x * this.transformacoes.x;
+        pf.x = pf.x * this.transformacoes.x;
+      }
+
+      if (this.transformacoes.y != null && this.transformacoes.y != 0) {
+        p0.y = p0.y * this.transformacoes.y;
+        pf.y = pf.y * this.transformacoes.y;
+      }
+
+      p0 = { x: p0.x + p0_orig.x, y: p0.y + p0_orig.y };
+      pf = { x: pf.x + p0_orig.x, y: pf.y + p0_orig.y };
+
+      this.redraw(p0, pf);
+    }
+  }
+
+  rotacao() {
+    console.log(this.transformacoes);
+
+    let ang = -(this.transformacoes.r * Math.PI) / 180;
+
+    if (this.gridObject) {
+      let obj = this.gridObject;
+
+      let p0_orig = obj[0];
+      let pf_orig = obj[obj.length - 1];
+
+      let p0 = { x: 0, y: 0 };
+      let pf = { x: pf_orig.x - p0_orig.x, y: pf_orig.y - p0_orig.y };
+
+      console.log(p0, pf);
+
+      let p0xAux = p0.x * Math.cos(ang) - p0.y * Math.sin(ang);
+      let p0yAux = p0.x * Math.sin(ang) + p0.y * Math.cos(ang);
+      p0.x = Math.round(p0xAux);
+      p0.y = Math.round(p0yAux);
+
+      let pfxAux = pf.x * Math.cos(ang) - pf.y * Math.sin(ang);
+      let pfyAux = pf.x * Math.sin(ang) + pf.y * Math.cos(ang);
+      pf.x = Math.round(pfxAux);
+      pf.y = Math.round(pfyAux);
+
+      p0 = { x: p0.x + p0_orig.x, y: p0.y + p0_orig.y };
+      pf = { x: pf.x + p0_orig.x, y: pf.y + p0_orig.y };
+
+      this.redraw(p0, pf);
+    }
+  }
+
+  reflexaoX(p0: any, pf: any, desl_p0: any, desl_pf: any) {
+    if (p0.y < this.centerPixel.y) p0.y = p0.y + 2 * desl_p0.y;
+    else p0.y = p0.y - 2 * desl_p0.y;
+
+    if (pf.y < this.centerPixel.y) pf.y = pf.y + 2 * desl_pf.y;
+    else pf.y = pf.y - 2 * desl_pf.y;
+  }
+
+  reflexaoY(p0: any, pf: any, desl_p0: any, desl_pf: any) {
+    if (p0.x < this.centerPixel.x) p0.x = p0.x + 2 * desl_p0.x;
+    else p0.x = p0.x - 2 * desl_p0.x;
+
+    if (pf.x < this.centerPixel.x) pf.x = pf.x + 2 * desl_pf.x;
+    else pf.x = pf.x - 2 * desl_pf.x;
+  }
+
+  reflexao() {
+    let obj = this.gridObject;
+
+    let p0 = obj[0];
+    let pf = obj[obj.length - 1];
+
+    let desl_p0 = {
+      x: Math.abs(p0.x - this.centerPixel.x),
+      y: Math.abs(p0.y - this.centerPixel.y),
+    };
+    let desl_pf = {
+      x: Math.abs(pf.x - this.centerPixel.x),
+      y: Math.abs(pf.y - this.centerPixel.y),
+    };
+    console.log('pontos:', p0, pf);
+    console.log('deslocamentos:', desl_p0, desl_pf);
+
+    if (this.transformacoes.reflexao == 'x')
+      this.reflexaoX(p0, pf, desl_p0, desl_pf);
+    else if (this.transformacoes.reflexao == 'y')
+      this.reflexaoY(p0, pf, desl_p0, desl_pf);
+    else if (this.transformacoes.reflexao == 'xy') {
+      this.reflexaoX(p0, pf, desl_p0, desl_pf);
+      this.reflexaoY(p0, pf, desl_p0, desl_pf);
+    }
+
+    this.redraw(p0, pf);
+  }
+
+  //------------------ RECORTES --------------------------
+  regionCode(
+    min_x: number,
+    min_y: number,
+    max_x: number,
+    max_y: number,
+    x: number,
+    y: number
+  ) {
+    let cod = 0;
+
+    if (x < min_x) cod += 1; // esq - seta bit 0
+    if (x > max_x) cod += 2; // dir - seta bit 1
+    if (y < min_y) cod += 4; // inf - seta bit 2
+    if (y > max_y) cod += 8; // sup - seta bit 4
+
+    return cod;
+  }
+
+  cohenSutherland() {
+    let min_x = this.paintedPixels[0].x;
+    let min_y = this.paintedPixels[0].y;
+    let max_x = this.paintedPixels[1].x;
+    let max_y = this.paintedPixels[1].y;
+
+    let obj = this.gridObject;
+
+    let x1 = obj[0].x;
+    let y1 = obj[0].y;
+    let x2 = obj[obj.length - 1].x;
+    let y2 = obj[obj.length - 1].y;
+
+    let aceite = false;
+    let feito = false;
+
+    while (!feito) {
+      let c1 = this.regionCode(min_x, min_y, max_x, max_y, x1, y1);
+      let c2 = this.regionCode(min_x, min_y, max_x, max_y, x2, y2);
+
+      if (c1 == 0 && c2 == 0) {
+        aceite = true;
+        feito = true;
+      } else if ((c1 & c2) != 0) {
+        feito = true;
+      } else {
+        let cfora, x, y;
+
+        if (c1 != 0) cfora = c1;
+        else cfora = c2;
+
+        if (cfora & 8) {
+          // ponto está em cima da janela
+          x = x1 + ((x2 - x1) * (max_y - y1)) / (y2 - y1);
+          y = max_y;
+        } else if (cfora & 4) {
+          // ponto está abaixo da janela
+          x = x1 + ((x2 - x1) * (min_y - y1)) / (y2 - y1);
+          y = min_y;
+        } else if (cfora & 2) {
+          // ponto está a direita da janela
+          y = y1 + ((y2 - y1) * (max_x - x1)) / (x2 - x1);
+          x = max_x;
+        } else if (cfora & 1) {
+          // ponto está a esquerda da janela
+          y = y1 + ((y2 - y1) * (min_x - x1)) / (x2 - x1);
+          x = min_x;
+        }
+
+        // Agora o ponto de interseção x, y é encontrado
+        // Substituímos o ponto fora do retângulo
+        // pelo ponto de interseção
+        if (cfora == c1) {
+          x1 = Math.round(x);
+          y1 = Math.round(y);
+          c1 = this.regionCode(min_x, min_y, max_x, max_y, x1, y1);
+        } else {
+          x2 = Math.round(x);
+          y2 = Math.round(y);
+          c2 = this.regionCode(min_x, min_y, max_x, max_y, x2, y2);
+        }
+      }
+
+      // Se está na área de código 0000
+      if (aceite) {
+        // redesenha o objeto na área de janela
+        this.redraw({ x: x1, y: y1 }, { x: x2, y: y2 });
+      }
+    }
+  }
+
+  clipTest(p: number, q: number, u1: number, u2: number) {
+    let result = true;
+
+    if (p < 0.0) { // fora pra dentro
+      let r = q / p;
+
+      if (r > u2) result = false;
+      else if (r > u1) u1 = r;
+
+    } else if (p > 0.0) { // dentro pra fora
+      let r = q / p;
+
+      if (r < u1) result = false;
+      else if (r < u2) u2 = r;
+
+    } else if (q < 0.0) result = false;
+
+    return result;
+  }
+
+  liangBarsky() {
+    let min_x = this.paintedPixels[0].x;
+    let min_y = this.paintedPixels[0].y;
+    let max_x = this.paintedPixels[1].x;
+    let max_y = this.paintedPixels[1].y;
+
+    let obj = this.gridObject;
+
+    let x1 = obj[0].x;
+    let y1 = obj[0].y;
+    let x2 = obj[obj.length - 1].x;
+    let y2 = obj[obj.length - 1].y;
+
+    console.log(obj[0], obj[obj.length - 1]);
+
+    let u1 = 0.0;
+    let u2 = 1.0;
+    let dx = x2 - x1;
+    let dy = y2 - y1;
+
+    if (this.clipTest(-dx, x1 - min_x, u1, u2)) {
+      if (this.clipTest(dx, max_x - x1, u1, u2)) {
+        if (this.clipTest(-dy, y1 - min_y, u1, u2)) {
+          if (this.clipTest(dy, max_y - y1, u1, u2)) {
+            if (u2 < 1.0) {
+              x2 = x1 + u2 * dx;
+              y2 = y1 + u2 * dy;
+            }
+            if (u1 > 0.0) {
+              x1 = x1 + u1 * dx;
+              y1 = y1 + u1 * dy;
+            }
+            
+            console.log({ x: Math.round(x1), y: Math.round(y1) },
+            { x: Math.round(x2), y: Math.round(y2) });
+            
+            this.redraw(
+              { x: Math.round(x1), y: Math.round(y1) },
+              { x: Math.round(x2), y: Math.round(y2) }
+            );
+          }
+        }
+      }
+    }
+  }
+
+  redraw(p0: any, pf: any) {
+    for (let x = 0; x <= 70; x++) {
+      for (let y = 0; y <= 70; y++) {
+        this.gridService.clearPixel(x, y);
+      }
+    }
+
+    if (this.drawType === 'dda') {
+      this.dda(p0.x, p0.y, pf.x, pf.y);
+    } else if (this.drawType === 'bresenham') {
+      this.lineBresenham(p0.x, p0.y, pf.x, pf.y);
+    } else if (this.drawType === 'circle') {
+      this.circleBresenham(p0.x, p0.y, pf.x, pf.y);
+    }
+  }
+
   cleanCanvas() {
-    for (let x = 0; x < 70; x++) {
-      for (let y = 0; y < 70; y++) {
+    for (let x = 0; x <= 70; x++) {
+      for (let y = 0; y <= 70; y++) {
         this.gridService.clearPixel(x, y);
       }
     }
     this.paintedPixels = [];
-    this.gridObject = null;
+    this.gridObject = [];
     this.setNumPixels();
-    this.enableGrid = true;
   }
 }

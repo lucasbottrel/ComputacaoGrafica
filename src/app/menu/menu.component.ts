@@ -6,12 +6,11 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./menu.component.css'],
 })
 export class MenuComponent implements OnInit {
-  @Output() enableGridEvent = new EventEmitter<boolean>();
   @Output() buttonSelectedEvent = new EventEmitter<string>();
   @Output() fatorEvent = new EventEmitter<any>();
 
-  enableGrid = false;
   buttonSelected: string = '';
+  reflexaoButtonSelected: string = ''
   raio: any;
   fatorX: any;
   fatorY: any;
@@ -24,52 +23,59 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {}
 
   selectRetasDDA() {
-    this.enableGrid = true;
-    this.enableGridEvent.emit(this.enableGrid);
     this.buttonSelected = 'retasDDA';
     this.buttonSelectedEvent.emit(this.buttonSelected);
   }
 
   selectRetasBresenham() {
-    this.enableGrid = true;
-    this.enableGridEvent.emit(this.enableGrid);
     this.buttonSelected = 'retasBresenham';
     this.buttonSelectedEvent.emit(this.buttonSelected);
   }
 
   selectCirculoBresenham() {
-    this.enableGrid = true;
-    this.enableGridEvent.emit(this.enableGrid);
     this.buttonSelected = 'circuloBresenham';
     this.buttonSelectedEvent.emit(this.buttonSelected);
   }
 
   selectTranslacao(){
-    this.enableGrid = false;
+    this.reflexaoButtonSelected = '';
     this.buttonSelected = 'translacao';
     this.buttonSelectedEvent.emit(this.buttonSelected);
   }
 
   selectRotacao(){
-    this.enableGrid = false;
+    this.reflexaoButtonSelected = '';
     this.buttonSelected = 'rotacao';
     this.buttonSelectedEvent.emit(this.buttonSelected);
   }
 
   selectEscala(){
-    this.enableGrid = false;
+    this.reflexaoButtonSelected = '';
     this.buttonSelected = 'escala';
     this.buttonSelectedEvent.emit(this.buttonSelected);
   }
 
   selectReflexao(){
-    this.enableGrid = false;
     this.buttonSelected = 'reflexao';
     this.buttonSelectedEvent.emit(this.buttonSelected);
   }
 
+  selectReflexaoX(){
+    this.reflexaoButtonSelected = 'x';
+    this.fatorEvent.emit({"reflexao":"x"})
+  }
+
+  selectReflexaoY(){
+    this.reflexaoButtonSelected = 'y';
+    this.fatorEvent.emit({"reflexao":"y"})
+  }
+
+  selectReflexaoXY(){
+    this.reflexaoButtonSelected = 'xy';
+    this.fatorEvent.emit({"reflexao":"xy"})
+  }
+
   enviarParametros(){
-    this.enableGrid = false;
     if(this.buttonSelected === 'translacao') this.fatorEvent.emit({x: this.fatorX, y: this.fatorY});
     else if(this.buttonSelected === 'rotacao') this.fatorEvent.emit({r: this.angulo});
     else if(this.buttonSelected === 'escala') this.fatorEvent.emit({x: this.escalaX, y:this.escalaY})
@@ -78,5 +84,15 @@ export class MenuComponent implements OnInit {
     this.escalaX = "";
     this.escalaY = "";
     this.angulo = "";
+  }
+
+  selectCohenSutherland(){
+    this.buttonSelected = 'cohenSutherland';
+    this.buttonSelectedEvent.emit(this.buttonSelected);
+  }
+
+  selectLiangBarsky(){
+    this.buttonSelected = 'liangBarsky';
+    this.buttonSelectedEvent.emit(this.buttonSelected);
   }
 }

@@ -7,8 +7,8 @@
       <h1 class="title">ALGORITMOS UNIDADE 01: <strong>COMPUTAÇÃO GRÁFICA</strong></h1>
     </div>
     <div class="page-wrapper">
-      <app-menu (enableGridEvent)="enableGridMessage($event)" (buttonSelectedEvent)="buttonSelectedMessage($event)" (fatorEvent)="transformacoesMessage($event)"></app-menu>
-      <app-canvas [enableGrid]="enableGrid" [buttonSelected]="buttonSelected" [transformacoes]="transformacoes"></app-canvas>
+      <app-menu (buttonSelectedEvent)="buttonSelectedMessage($event)" (fatorEvent)="transformacoesMessage($event)"></app-menu>
+      <app-canvas [buttonSelected]="buttonSelected" [transformacoes]="transformacoes"></app-canvas>
     </div>
   </body>
 </html>
