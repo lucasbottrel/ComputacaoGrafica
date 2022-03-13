@@ -1,14 +1,14 @@
-# ComputacaoGraficaUnidadeUm
+![GitHub Repo stars](https://img.shields.io/github/stars/lucasbottrel/ComputacaoGrafica?color=yellow&style=for-the-badge) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/lucasbottrel/ComputacaoGrafica?style=for-the-badge) ![GitHub repo size](https://img.shields.io/github/repo-size/lucasbottrel/ComputacaoGrafica?style=for-the-badge) ![GitHub last commit](https://img.shields.io/github/last-commit/lucasbottrel/ComputacaoGrafica?style=for-the-badge) [![LinkedIn][linkedin-shield]][linkedin-url]
+
+# Computacao Grafica
+
+Projeto desenvolvido durante a disciplina 'Computação Gráfica' integrante da grade do curso de 'Ciência da Computação' - PUCMG. O projeto consiste em desenvolver os algoritmos de desenhos de retas e circunferência, transformações geométricas e alguns algoritmos de recortes.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.4.
 
-## Remember to install dependencies
+## Lembre-se de instalar as dependências
 
 ` npm install `
-
-## Grid lib install
-
-`npm i ngx-drawing-grid`
 
 ## Development server
 
@@ -33,3 +33,7 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/lucas-bottrel/
