@@ -51,7 +51,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   @Input('transformacoes')
   set TRANSFORMACOES(transformacoes: any) {
     this.transformacoes = transformacoes;
-    console.log(this.transformacoes);
 
     if (this.buttonSelected === 'translacao') this.translacao();
     else if (this.buttonSelected === 'rotacao') this.rotacao();
@@ -78,11 +77,9 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.enableGrid = true;
       this.numPixels = 2;
     }
-    console.log(this.buttonSelected, this.numPixels, this.gridObject.length);
   }
 
   onMouseDown(pixel: Pixel) {
-    console.log('Pixel clicado:', pixel);
 
     if (this.enableGrid && this.numPixels > 0) {
       this.fillPixel(pixel.x, pixel.y);
@@ -121,7 +118,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.paintedPixels = [];
     }
 
-    console.log('Objeto no grid:', this.gridObject);
   }
 
   onContextMenu(pixel: Pixel) {
@@ -130,7 +126,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   private fillPixel(x: number, y: number) {
     this.paintedPixels.push({ x: x, y: y });
-    console.log('x0 e y0:', this.paintedPixels);
 
     this.gridService.fillPixel(x, y, this.pixelColor);
   }
@@ -269,7 +264,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   //------------------ TRANSFORMAÇÕES GEOMETRICAS --------------------------
   translacao() {
     let newGridObject: any;
-    console.log(this.transformacoes);
 
     if (this.gridObject) {
       let obj = this.gridObject;
@@ -295,7 +289,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   escala() {
-    console.log(this.transformacoes);
 
     if (this.gridObject) {
       let obj = this.gridObject;
@@ -324,7 +317,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   rotacao() {
-    console.log(this.transformacoes);
 
     let ang = -(this.transformacoes.r * Math.PI) / 180;
 
@@ -336,8 +328,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
       let p0 = { x: 0, y: 0 };
       let pf = { x: pf_orig.x - p0_orig.x, y: pf_orig.y - p0_orig.y };
-
-      console.log(p0, pf);
 
       let p0xAux = p0.x * Math.cos(ang) - p0.y * Math.sin(ang);
       let p0yAux = p0.x * Math.sin(ang) + p0.y * Math.cos(ang);
@@ -386,8 +376,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
       x: Math.abs(pf.x - this.centerPixel.x),
       y: Math.abs(pf.y - this.centerPixel.y),
     };
-    console.log('pontos:', p0, pf);
-    console.log('deslocamentos:', desl_p0, desl_pf);
 
     if (this.transformacoes.reflexao == 'x')
       this.reflexaoX(p0, pf, desl_p0, desl_pf);
@@ -402,6 +390,16 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   //------------------ RECORTES --------------------------
+  /**
+   * Função para calcular o código de região para um ponto (x, y)
+   * @param min_x limite minimo em x da janela
+   * @param min_y limite minimo em y da janela
+   * @param max_x limite maximo em x da janela
+   * @param max_y limite maximo em y da janela
+   * @param x x do ponto
+   * @param y y do ponto
+   * @returns código indicando a posição do ponto no plano
+   */
   regionCode(
     min_x: number,
     min_y: number,
@@ -410,7 +408,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
     x: number,
     y: number
   ) {
-    let cod = 0;
+    
+    let cod = 0; // inicializa como se estives dentro da janela - 0000
 
     if (x < min_x) cod += 1; // esq - seta bit 0
     if (x > max_x) cod += 2; // dir - seta bit 1
@@ -420,7 +419,14 @@ export class CanvasComponent implements OnInit, OnDestroy {
     return cod;
   }
 
+  /**
+   * Algoritmo de Cohen Sutherland para calcular o recorte
+   */
   cohenSutherland() {
+    
+    // Definindo x_max, y_max e x_min, y_min para 
+    // o retângulo de recorte.Os pontos diagonais são 
+    // o suficiente para definir um retângulo
     let min_x = this.paintedPixels[0].x;
     let min_y = this.paintedPixels[0].y;
     let max_x = this.paintedPixels[1].x;
@@ -433,24 +439,36 @@ export class CanvasComponent implements OnInit, OnDestroy {
     let x2 = obj[obj.length - 1].x;
     let y2 = obj[obj.length - 1].y;
 
+    // Inicializa a linha como fora da janela retangular
     let aceite = false;
     let feito = false;
 
-    while (!feito) {
-      let c1 = this.regionCode(min_x, min_y, max_x, max_y, x1, y1);
-      let c2 = this.regionCode(min_x, min_y, max_x, max_y, x2, y2);
+    // Calcular códigos de região para P1, P2
+    let c1 = this.regionCode(min_x, min_y, max_x, max_y, x1, y1);
+    let c2 = this.regionCode(min_x, min_y, max_x, max_y, x2, y2);
 
+    while (!feito) {
+
+      // Se ambos os pontos finais estiverem dentro do retângulo
       if (c1 == 0 && c2 == 0) {
         aceite = true;
         feito = true;
+      
+      // Se ambos os pontos finais estiverem fora do retângulo, 
+      // na mesma região
       } else if ((c1 & c2) != 0) {
         feito = true;
+      // Algum segmento de linha está dentro do 
+      // retângulo
       } else {
         let cfora, x, y;
 
+        // Pelo menos um ponto final está fora do 
+        // retângulo, selecione-o.
         if (c1 != 0) cfora = c1;
         else cfora = c2;
 
+        // Calcula o ponto de intersecção
         if (cfora & 8) {
           // ponto está em cima da janela
           x = x1 + ((x2 - x1) * (max_y - y1)) / (y2 - y1);
@@ -491,26 +509,9 @@ export class CanvasComponent implements OnInit, OnDestroy {
     }
   }
 
-  clipTest(p: number, q: number, u1: number, u2: number) {
-    let result = true;
-
-    if (p < 0.0) { // fora pra dentro
-      let r = q / p;
-
-      if (r > u2) result = false;
-      else if (r > u1) u1 = r;
-
-    } else if (p > 0.0) { // dentro pra fora
-      let r = q / p;
-
-      if (r < u1) result = false;
-      else if (r < u2) u2 = r;
-
-    } else if (q < 0.0) result = false;
-
-    return result;
-  }
-
+  /**
+   * Algoritmo de Liang barsky para calcular o recorte
+   */
   liangBarsky() {
     let min_x = this.paintedPixels[0].x;
     let min_y = this.paintedPixels[0].y;
@@ -524,40 +525,58 @@ export class CanvasComponent implements OnInit, OnDestroy {
     let x2 = obj[obj.length - 1].x;
     let y2 = obj[obj.length - 1].y;
 
-    console.log(obj[0], obj[obj.length - 1]);
-
-    let u1 = 0.0;
-    let u2 = 1.0;
     let dx = x2 - x1;
     let dy = y2 - y1;
+    let p = [-dx, dx, -dy, dy];
+    let q = [x1 - min_x, max_x - x1, y1 - min_y, max_y - y1];
+    let t1 = 0.0;
+    let t2 = 1.0;
+    let temp, xx1, yy1, xx2, yy2;
 
-    if (this.clipTest(-dx, x1 - min_x, u1, u2)) {
-      if (this.clipTest(dx, max_x - x1, u1, u2)) {
-        if (this.clipTest(-dy, y1 - min_y, u1, u2)) {
-          if (this.clipTest(dy, max_y - y1, u1, u2)) {
-            if (u2 < 1.0) {
-              x2 = x1 + u2 * dx;
-              y2 = y1 + u2 * dy;
-            }
-            if (u1 > 0.0) {
-              x1 = x1 + u1 * dx;
-              y1 = y1 + u1 * dy;
-            }
-            
-            console.log({ x: Math.round(x1), y: Math.round(y1) },
-            { x: Math.round(x2), y: Math.round(y2) });
-            
-            this.redraw(
-              { x: Math.round(x1), y: Math.round(y1) },
-              { x: Math.round(x2), y: Math.round(y2) }
-            );
+    for (let i = 0; i < 4; i++) {
+      if (p[i] == 0) {
+        if (q[i] >= 0) {
+          if (i < 2) {
+            if (y1 < min_y) y1 = min_y;
+            if (y2 > max_y) y2 = max_y;
+          }
+          if (i > 1) {
+            if (x1 < min_x) x1 = min_x;
+            if (x2 > max_x) x2 = max_x;
           }
         }
       }
     }
+
+    for (let i = 0; i < 4; i++) {
+      temp = q[i] / p[i];
+      if (p[i] < 0) {
+        if (t1 <= temp) t1 = temp;
+      } else {
+        if (t2 > temp) t2 = temp;
+      }
+    }
+
+    if (t1 < t2) {
+      xx1 = x1 + t1 * p[1];
+      xx2 = x1 + t2 * p[1];
+      yy1 = y1 + t1 * p[3];
+      yy2 = y1 + t2 * p[3];
+    }
+
+    this.redraw(
+      { x: Math.round(xx1), y: Math.round(yy1) },
+      { x: Math.round(xx2), y: Math.round(yy2) }
+    );
   }
 
+  /**
+   * Redesenha a forma de acordo com o desenho
+   * @param p0 ponto inicial
+   * @param pf ponto final
+   */
   redraw(p0: any, pf: any) {
+    
     for (let x = 0; x <= 70; x++) {
       for (let y = 0; y <= 70; y++) {
         this.gridService.clearPixel(x, y);
@@ -573,6 +592,9 @@ export class CanvasComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Limpa a tela
+   */
   cleanCanvas() {
     for (let x = 0; x <= 70; x++) {
       for (let y = 0; y <= 70; y++) {
