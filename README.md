@@ -1,5 +1,5 @@
-![GitHub Repo stars](https://img.shields.io/github/stars/lucasbottrel/ComputacaoGrafica?color=yellow&style=for-the-badge) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/lucasbottrel/ComputacaoGrafica?style=for-the-badge) ![GitHub repo size](https://img.shields.io/github/repo-size/lucasbottrel/ComputacaoGrafica?style=for-the-badge) ![GitHub last commit](https://img.shields.io/github/last-commit/lucasbottrel/ComputacaoGrafica?style=for-the-badge) [![LinkedIn][linkedin-shield]][linkedin-url]
-
+![GitHub Repo stars](https://img.shields.io/github/stars/lucasbottrel/ComputacaoGrafica?color=yellow&style=for-the-badge) ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/lucasbottrel/ComputacaoGrafica?color=%230058e6&label=version&style=for-the-badge) ![GitHub repo size](https://img.shields.io/github/repo-size/lucasbottrel/ComputacaoGrafica?style=for-the-badge) ![GitHub last commit](https://img.shields.io/github/last-commit/lucasbottrel/ComputacaoGrafica?style=for-the-badge) [![LinkedIn][linkedin-shield]][linkedin-url]
+ 
 # Computacao Grafica
 
 Projeto desenvolvido durante a disciplina 'Computação Gráfica' integrante da grade do curso de 'Ciência da Computação' - PUCMG. O projeto consiste em desenvolver os algoritmos de desenhos de retas e circunferência, transformações geométricas e alguns algoritmos de recortes.
