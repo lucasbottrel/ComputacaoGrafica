@@ -73,13 +73,13 @@ input::-webkit-inner-spin-button {
     font-size: 20px;
 }
 
-.parametros-translacao, .parametros-rotacao{
+.parametros-translacao, .parametros-rotacao, .parametros-escala{
     display: flex;
     width: 100%;
     margin: 10px;
 }
 
-.parametros-translacao p, .parametros-rotacao p{
+.parametros-translacao p, .parametros-rotacao p, .parametros-escala p{
     font-size: 13px;
 }
 
