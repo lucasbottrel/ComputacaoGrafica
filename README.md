@@ -4,6 +4,8 @@
 
 Projeto desenvolvido durante a disciplina 'Computação Gráfica' integrante da grade do curso de 'Ciência da Computação' - PUCMG. O projeto consiste em desenvolver os algoritmos de desenhos de retas e circunferência, transformações geométricas e alguns algoritmos de recortes.
 
+https://user-images.githubusercontent.com/65674658/158277883-93f61a87-964e-4dbd-b946-95901ce8cbb9.mp4
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.4.
 
 ## Lembre-se de instalar as dependências
