@@ -11,21 +11,20 @@ import { DrawingGridService, Pixel, PaintingMode } from 'ngx-drawing-grid';
 export class CanvasComponent implements OnInit, OnDestroy {
   private readonly destroy$: Subject<void> = new Subject<void>();
 
-  enableGrid: boolean = false;
-  buttonSelected: string = '';
-  transformacoes: any;
-  centerPixel = { x: 35, y: 35 };
-  width: number = 500;
-  height: number = 500;
-  pixelSize = 7;
-  numPixels: number = 0;
-  paintedPixels: any = [];
-  paintedPixelsClip: any = [];
-  objPixels: any = [];
-  drawType: string = '';
-  paintingMode: any;
-  pixelColor: string = 'orange';
-  gridObject: any = [];
+  enableGrid: boolean = false; // habilita o grid
+  buttonSelected: string = ''; // botão que foi selecionado no  menu
+  transformacoes: any; // passagem dos fatores de transformações
+  centerPixel = { x: 35, y: 35 }; // pixel central do grid
+  width: number = 500; // largura do grid
+  height: number = 500; // altura do grid
+  pixelSize = 7; // tamanho do pixel no grid
+  numPixels: number = 0; // controle do número de pixels a serem preenchidos no grid
+  paintedPixels: any = []; // guarda os pixels preenchidos
+  objPixels: any = []; // guarda pixels do objeto no grid
+  drawType: string = ''; // guarda o tipo de desenho criado
+  paintingMode: any; // modo de pintura
+  pixelColor: string = 'orange'; // cor do pixel
+  gridObject: any = []; // objeto no grid
 
   constructor(private gridService: DrawingGridService) {}
 
@@ -42,22 +41,28 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  // @Input passagem do botão selecionado no menu
   @Input('buttonSelected')
   set BUTTONSELECTED(buttonSelected: any) {
     this.buttonSelected = buttonSelected;
     this.setNumPixels();
   }
 
+  // @Input valores das transformações
   @Input('transformacoes')
   set TRANSFORMACOES(transformacoes: any) {
     this.transformacoes = transformacoes;
 
+    // chama a função de acordo com o botão selecionado
     if (this.buttonSelected === 'translacao') this.translacao();
     else if (this.buttonSelected === 'rotacao') this.rotacao();
     else if (this.buttonSelected === 'escala') this.escala();
     else if (this.buttonSelected === 'reflexao') this.reflexao();
   }
 
+  /**
+   * Define número de pixels de acordo com o botão selecionado
+   */
   setNumPixels() {
     if (
       (this.buttonSelected === 'retasDDA' ||
@@ -79,13 +84,18 @@ export class CanvasComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Ao clicar no grid
+   * @param pixel pixel clicado
+   */
   onMouseDown(pixel: Pixel) {
-
+    // Se o grid estiver habilitado e ainda puder preencher mais pixels
     if (this.enableGrid && this.numPixels > 0) {
       this.fillPixel(pixel.x, pixel.y);
       this.numPixels--;
     }
 
+    // chama a função de acordo com o botão selecionado
     if (this.numPixels == 0 && this.enableGrid) {
       if (this.buttonSelected == 'retasDDA') {
         this.dda(
@@ -108,16 +118,15 @@ export class CanvasComponent implements OnInit, OnDestroy {
           this.paintedPixels[1].x,
           this.paintedPixels[1].y
         );
-      } else if (this.buttonSelected == 'cohenSutherland') {
+      } else if (this.gridObject && this.buttonSelected == 'cohenSutherland') {
         this.cohenSutherland();
-      } else if (this.buttonSelected == 'liangBarsky') {
+      } else if (this.gridObject && this.buttonSelected == 'liangBarsky') {
         this.liangBarsky();
       }
 
       this.enableGrid = false;
       this.paintedPixels = [];
     }
-
   }
 
   onContextMenu(pixel: Pixel) {
@@ -131,6 +140,13 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   //------------------ DESENHOS --------------------------
+  /**
+   * Algoritmo de rasterização de retas DDA
+   * @param x0 ponto inicial em x
+   * @param y0 ponto inicial em y
+   * @param x1 ponto final em x 
+   * @param y1 ponto final em y
+   */
   dda(x0: number, y0: number, x1: number, y1: number) {
     this.drawType = 'dda';
     let deltaX = x1 - x0;
@@ -156,6 +172,13 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.objPixels = [];
   }
 
+  /**
+   * Algoritmo de rasterização de retas Bresenham
+   * @param x0 
+   * @param y0 
+   * @param x1 
+   * @param y1 
+   */
   lineBresenham(x0: number, y0: number, x1: number, y1: number) {
     this.drawType = 'bresenham';
     let deltaX = x1 - x0;
@@ -186,7 +209,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
         this.objPixels.push({ x: x, y: y });
       }
     } else {
-      // coeficiente >= 1
+      // coeficiente angular>= 1
       let d = 2 * absdx - absdy;
 
       for (let i = 0; i < absdy; i++) {
@@ -204,36 +227,66 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.objPixels = [];
   }
 
+  /**
+   * Desenha circunferência a partir do ponto central e borda atual
+   * @param xc ponto central em x
+   * @param yc ponto central em y
+   * @param x  ponto da borda em x
+   * @param y ponto da borda em y
+   */
   drawCircle(xc: any, yc: any, x: any, y: any) {
+    // (x,y)
     this.gridService.fillPixel(xc + x, yc + y, 'white');
     this.objPixels.push({ x: xc + x, y: yc + y });
 
+    // (-x,y)
     this.gridService.fillPixel(xc - x, yc + y, 'white');
     this.objPixels.push({ x: xc - x, y: yc + y });
 
+    // (x, -y)
     this.gridService.fillPixel(xc + x, yc - y, 'white');
     this.objPixels.push({ x: xc + x, y: yc - y });
 
+    // (-x, -y)
     this.gridService.fillPixel(xc - x, yc - y, 'white');
     this.objPixels.push({ x: xc - x, y: yc - y });
 
+    // (y, x)
     this.gridService.fillPixel(xc + y, yc + x, 'white');
     this.objPixels.push({ x: xc + y, y: yc + x });
 
+    // (-y, x)
     this.gridService.fillPixel(xc - y, yc + x, 'white');
     this.objPixels.push({ x: xc - y, y: yc + x });
 
+    // (y, -x)
     this.gridService.fillPixel(xc + y, yc - x, 'white');
     this.objPixels.push({ x: xc + y, y: yc - x });
 
+    // (-y, -x)
     this.gridService.fillPixel(xc - y, yc - x, 'white');
     this.objPixels.push({ x: xc - y, y: yc - x });
   }
 
+  /**
+   * Calcula do raio (distância entre dois pontos)
+   * @param x1 ponto inicial em x
+   * @param y1 ponto inicial em y
+   * @param x2 ponto final em x
+   * @param y2 ponto final em y
+   * @returns distância dos pontos
+   */
   calculateRadius(x1: number, y1: number, x2: number, y2: number) {
     return Math.ceil(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
   }
 
+  /**
+   * Algoritmo de rasterização de circunferência Bresenham
+   * @param x0 ponto inicial em x
+   * @param y0 ponto inicial em y
+   * @param x1 ponto final em x
+   * @param y1 ponto final em y
+   */
   circleBresenham(x0: number, y0: number, x1: number, y1: number) {
     this.drawType = 'circle';
     let xc = x0;
@@ -289,7 +342,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   escala() {
-
     if (this.gridObject) {
       let obj = this.gridObject;
 
@@ -317,7 +369,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   rotacao() {
-
     let ang = -(this.transformacoes.r * Math.PI) / 180;
 
     if (this.gridObject) {
@@ -362,12 +413,17 @@ export class CanvasComponent implements OnInit, OnDestroy {
     else pf.x = pf.x - 2 * desl_pf.x;
   }
 
+  /**
+   * Realiza a reflexão do objeto
+   */
   reflexao() {
     let obj = this.gridObject;
 
+    // ponto inicial e final do objeto
     let p0 = obj[0];
     let pf = obj[obj.length - 1];
 
+    // calcula o deslocamento de acordo com o ponto central do grid
     let desl_p0 = {
       x: Math.abs(p0.x - this.centerPixel.x),
       y: Math.abs(p0.y - this.centerPixel.y),
@@ -377,6 +433,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
       y: Math.abs(pf.y - this.centerPixel.y),
     };
 
+    // chama a função de acordo com o tipo de reflexao solicitada
     if (this.transformacoes.reflexao == 'x')
       this.reflexaoX(p0, pf, desl_p0, desl_pf);
     else if (this.transformacoes.reflexao == 'y')
@@ -385,7 +442,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
       this.reflexaoX(p0, pf, desl_p0, desl_pf);
       this.reflexaoY(p0, pf, desl_p0, desl_pf);
     }
-
+    // redesenha 
     this.redraw(p0, pf);
   }
 
@@ -408,7 +465,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
     x: number,
     y: number
   ) {
-    
     let cod = 0; // inicializa como se estives dentro da janela - 0000
 
     if (x < min_x) cod += 1; // esq - seta bit 0
@@ -423,9 +479,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
    * Algoritmo de Cohen Sutherland para calcular o recorte
    */
   cohenSutherland() {
-    
-    // Definindo x_max, y_max e x_min, y_min para 
-    // o retângulo de recorte.Os pontos diagonais são 
+    // Definindo x_max, y_max e x_min, y_min para
+    // o retângulo de recorte.Os pontos diagonais são
     // o suficiente para definir um retângulo
     let min_x = this.paintedPixels[0].x;
     let min_y = this.paintedPixels[0].y;
@@ -448,22 +503,21 @@ export class CanvasComponent implements OnInit, OnDestroy {
     let c2 = this.regionCode(min_x, min_y, max_x, max_y, x2, y2);
 
     while (!feito) {
-
       // Se ambos os pontos finais estiverem dentro do retângulo
       if (c1 == 0 && c2 == 0) {
         aceite = true;
         feito = true;
-      
-      // Se ambos os pontos finais estiverem fora do retângulo, 
-      // na mesma região
+
+        // Se ambos os pontos finais estiverem fora do retângulo,
+        // na mesma região
       } else if ((c1 & c2) != 0) {
         feito = true;
-      // Algum segmento de linha está dentro do 
-      // retângulo
+        // Algum segmento de linha está dentro do
+        // retângulo
       } else {
         let cfora, x, y;
 
-        // Pelo menos um ponto final está fora do 
+        // Pelo menos um ponto final está fora do
         // retângulo, selecione-o.
         if (c1 != 0) cfora = c1;
         else cfora = c2;
@@ -576,7 +630,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
    * @param pf ponto final
    */
   redraw(p0: any, pf: any) {
-    
     for (let x = 0; x <= 70; x++) {
       for (let y = 0; y <= 70; y++) {
         this.gridService.clearPixel(x, y);
